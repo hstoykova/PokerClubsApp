@@ -19,4 +19,8 @@
     <Folder Include="Configuration\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\PokerClubsApp.Data.Models\PokerClubsApp.Data.Models.csproj" />
+  </ItemGroup>
+
 </Project>
