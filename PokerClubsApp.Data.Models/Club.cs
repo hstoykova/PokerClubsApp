@@ -18,7 +18,6 @@ namespace PokerClubsApp.Data.Models
         public int UnionId { get; set; }
 
         [ForeignKey(nameof(UnionId))]
-
         public virtual Union Union { get; set; } = null!;
     }
 }

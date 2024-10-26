@@ -26,7 +26,7 @@ namespace PokerClubsApp.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<PlayerGame>()
-                .HasKey(pg => new { pg.PlayerId, pg.GameId });
+                .HasKey(pg => new { pg.PlayerAccountId, pg.GameId });
         }
     }
 }
