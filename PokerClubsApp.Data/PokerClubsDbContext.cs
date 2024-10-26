@@ -1,11 +1,13 @@
 ﻿using PokerClubsApp.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 
 namespace PokerClubsApp.Data
 {
-    public class PokerClubsDbContext : DbContext
+    public class PokerClubsDbContext : IdentityDbContext<IdentityUser>
     {
         public PokerClubsDbContext()
         {
