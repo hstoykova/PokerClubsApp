@@ -1,5 +1,6 @@
 ﻿using PokerClubsApp.Data.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 
 namespace PokerClubsApp.Data
@@ -15,12 +16,12 @@ namespace PokerClubsApp.Data
         {
         }
 
-        public virtual DbSet<Club> Clubs { get; set; }
-        public virtual DbSet<Player> Players { get; set; }
-        public virtual DbSet<Union> Unions { get; set; }
-        public virtual DbSet<GameType> GameTypes { get; set; }
-        public virtual DbSet<PlayedGame> PlayedGames { get; set; }
-        public virtual DbSet<PlayerGame> PlayersGames { get; set; }
+        public virtual DbSet<Club> Clubs { get; set; } = null!;
+        public virtual DbSet<Player> Players { get; set; } = null!;
+        public virtual DbSet<Union> Unions { get; set; } = null!;
+        public virtual DbSet<GameType> GamesTypes { get; set; } = null!;
+        public virtual DbSet<PlayedGame> PlayedGames { get; set; } = null!;
+        public virtual DbSet<PlayerGame> PlayersGames { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
