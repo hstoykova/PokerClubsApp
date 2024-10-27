@@ -27,8 +27,11 @@ namespace PokerClubsApp.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<PlayerGame>()
                 .HasKey(pg => new { pg.PlayerAccountId, pg.GameId });
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }
 }
