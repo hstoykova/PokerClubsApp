@@ -31,6 +31,7 @@ namespace PokerClubsApp.Data
 
             modelBuilder.Entity<PlayerGame>()
                 .HasKey(pg => new { pg.PlayerAccountId, pg.GameId });
+
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }
