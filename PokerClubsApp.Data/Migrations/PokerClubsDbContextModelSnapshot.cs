@@ -244,7 +244,7 @@ namespace PokerClubsApp.Data.Migrations
 
                     b.HasIndex("UnionId");
 
-                    b.ToTable("Clubs");
+                    b.ToTable("Clubs", (string)null);
 
                     b.HasData(
                         new
@@ -282,7 +282,7 @@ namespace PokerClubsApp.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("GamesTypes");
+                    b.ToTable("GamesTypes", (string)null);
 
                     b.HasData(
                         new
@@ -325,7 +325,7 @@ namespace PokerClubsApp.Data.Migrations
 
                     b.HasIndex("GameTypeId");
 
-                    b.ToTable("PlayedGames");
+                    b.ToTable("PlayedGames", (string)null);
                 });
 
             modelBuilder.Entity("PokerClubsApp.Data.Models.Player", b =>
@@ -348,7 +348,7 @@ namespace PokerClubsApp.Data.Migrations
 
                     b.HasIndex("ClubId");
 
-                    b.ToTable("Players");
+                    b.ToTable("Players", (string)null);
                 });
 
             modelBuilder.Entity("PokerClubsApp.Data.Models.PlayerGame", b =>
@@ -372,7 +372,7 @@ namespace PokerClubsApp.Data.Migrations
 
                     b.HasIndex("GameId");
 
-                    b.ToTable("PlayersGames");
+                    b.ToTable("PlayersGames", (string)null);
                 });
 
             modelBuilder.Entity("PokerClubsApp.Data.Models.Union", b =>
@@ -390,7 +390,7 @@ namespace PokerClubsApp.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Unions");
+                    b.ToTable("Unions", (string)null);
 
                     b.HasData(
                         new
