@@ -14,13 +14,12 @@ namespace PokerClubsApp.Web.ViewModels.Game
         [Required]
         public int AccountId { get; set; }
 
-        [Required]
-        [MinLength(PlayerNicknameMinLength)]
-        [MaxLength(PlayerNicknameMaxLength)]
-        public string Nickname { get; set; } = null!;
+        public List<Player> Players { get; set; } = new();
 
         [Required]
         public int ClubId { get; set; }
+
+        public List<Club> Clubs { get; set; } = new();
 
         [Required]
         public decimal Result { get; set; }

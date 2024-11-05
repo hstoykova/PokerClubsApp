@@ -14,18 +14,17 @@
     <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
         <form asp-action="Add" method="post">
             <div class="mb-3">
-                <label asp-for="@Model.AccountId" class="form-label-add-edit">Account Id</label>
-                <input asp-for="@Model.AccountId" class="form-control" aria-required="true" />
+                <label asp-for="@Model.AccountId" class="form-label-add-edit">Nickname</label>
+                <select asp-for="@Model.AccountId" class="form-control" aria-required="true" asp-items="@(new SelectList(Model.Players, "AccountId", "Nickname"))">
+                    <option value="">Select Account...</option>
+                </select>
                 <span asp-validation-for="@Model.AccountId" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <label asp-for="@Model.Nickname" class="form-label-add-edit">Nickname</label>
-                <input asp-for="@Model.Nickname" class="form-control" aria-required="true" />
-                <span asp-validation-for="@Model.Nickname" class="text-danger"></span>
-            </div>
-            <div class="mb-3">
-                <label asp-for="@Model.ClubId" class="form-label-add-edit">Club Id</label>
-                <input asp-for="@Model.ClubId" class="form-control" aria-required="true" />
+                <label asp-for="@Model.ClubId" class="form-label-add-edit">Club Name</label>
+                <select asp-for="@Model.ClubId" class="form-control" aria-required="true" asp-items="@(new SelectList(Model.Clubs, "Id", "Name"))">
+                    <option value="">Select Club...</option>
+                </select>
                 <span asp-validation-for="@Model.ClubId" class="text-danger"></span>
             </div>
             <div class="mb-3">

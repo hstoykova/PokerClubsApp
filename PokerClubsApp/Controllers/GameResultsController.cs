@@ -18,11 +18,10 @@ namespace PokerClubsApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Add()
         {
-            var model = new AddGameResultsModel()
-            {
-                GameTypes = await GetAllGameTypes()
-            };
-            //model.GameTypes = await GetAllGameTypes();
+            var model = new AddGameResultsModel();
+            model.GameTypes = await GetAllGameTypes();
+            model.Clubs = await GetAllClubs();
+            model.Players = await GetAllPlaters();
 
             return this.View(model);
         }
@@ -30,6 +29,16 @@ namespace PokerClubsApp.Controllers
         private async Task<List<GameType>> GetAllGameTypes()
         {
             return await context.GamesTypes.ToListAsync();
+        }
+
+        private async Task<List<Club>> GetAllClubs()
+        {
+            return await context.Clubs.ToListAsync();
+        }
+
+        private async Task<List<Player>> GetAllPlaters()
+        {
+            return await context.Players.ToListAsync();
         }
     }
 }
