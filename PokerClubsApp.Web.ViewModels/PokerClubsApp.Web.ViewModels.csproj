@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\PokerClubsApp.Common\PokerClubsApp.Common.csproj" />
+    <ProjectReference Include="..\PokerClubsApp.Data.Models\PokerClubsApp.Data.Models.csproj" />
+  </ItemGroup>
+
 </Project>
