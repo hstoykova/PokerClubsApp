@@ -44,8 +44,10 @@
                 <span asp-validation-for="@Model.EndedAt" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <label asp-for="@Model.GameTypeId" class="form-label-add-edit">GameTypeId</label>
-                <input asp-for="@Model.GameTypeId" class="form-control" aria-required="true" />
+                <label asp-for="@Model.GameTypeId" class="form-label-add-edit">Game Type</label>
+                <select asp-for="@Model.GameTypeId" class="form-control" aria-required="true" asp-items="@(new SelectList(Model.GameTypes, "Id", "Name"))">
+                    <option value="">Select Game Type...</option>
+                </select>
                 <span asp-validation-for="@Model.GameTypeId" class="text-danger"></span>
             </div>
             <div class="mb-3">
