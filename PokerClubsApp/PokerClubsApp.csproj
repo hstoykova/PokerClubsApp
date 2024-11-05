@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PokerClubsApp.Common\PokerClubsApp.Common.csproj" />
     <ProjectReference Include="..\PokerClubsApp.Data\PokerClubsApp.Data.csproj" />
     <ProjectReference Include="..\PokerClubsApp.Web.ViewModels\PokerClubsApp.Web.ViewModels.csproj" />
   </ItemGroup>

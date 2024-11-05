@@ -20,7 +20,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PokerClubsApp.Web.Infrastru
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PokerClubsApp.Web.ViewModels", "PokerClubsApp.Web.ViewModels\PokerClubsApp.Web.ViewModels.csproj", "{5554AD6D-51C2-468C-BCF0-5E9F525DED77}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokerClubsApp.Common", "PokerClubsApp.Common\PokerClubsApp.Common.csproj", "{470EEB75-B284-45C5-8D56-040DEE6EBCF8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PokerClubsApp.Common", "PokerClubsApp.Common\PokerClubsApp.Common.csproj", "{470EEB75-B284-45C5-8D56-040DEE6EBCF8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
