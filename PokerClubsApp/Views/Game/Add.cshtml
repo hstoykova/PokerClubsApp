@@ -1,0 +1,62 @@
+﻿@using PokerClubsApp.Web.ViewModels.Game
+@model AddGameResultsModel;
+
+@{
+    ViewBag.Title = "Add Game Results";
+    var today = DateTime.Now.ToString("yyyy-MM-dd");
+}
+
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+
+<div class="row">
+    <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+        <form asp-action="Add" method="post">
+            <div class="mb-3">
+                <label asp-for="@Model.AccountId" class="form-label-add-edit">Account Id</label>
+                <input asp-for="@Model.AccountId" class="form-control" aria-required="true" />
+                <span asp-validation-for="@Model.AccountId" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="@Model.Nickname" class="form-label-add-edit">Nickname</label>
+                <input asp-for="@Model.Nickname" class="form-control" aria-required="true" />
+                <span asp-validation-for="@Model.Nickname" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="@Model.ClubId" class="form-label-add-edit">Club Id</label>
+                <input asp-for="@Model.ClubId" class="form-control" aria-required="true" />
+                <span asp-validation-for="@Model.ClubId" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="@Model.Result" class="form-label-add-edit">Result</label>
+                <input asp-for="@Model.Result" class="form-control" aria-required="true" />
+                <span asp-validation-for="@Model.Result" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="@Model.Fee" class="form-label-add-edit">Fee</label>
+                <input asp-for="@Model.Fee" class="form-control" aria-required="true" />
+                <span asp-validation-for="@Model.Fee" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="@Model.EndedAt" class="form-label-add-edit">Ended at</label>
+                <input asp-for="@Model.EndedAt" class="form-control" aria-required="true" />
+                <span asp-validation-for="@Model.EndedAt" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="@Model.GameTypeId" class="form-label-add-edit">GameTypeId</label>
+                <input asp-for="@Model.GameTypeId" class="form-control" aria-required="true" />
+                <span asp-validation-for="@Model.GameTypeId" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <input class="btn btn-warning btn-dark-text mb-2 w-100 py-3 fw-bold rounded" type="submit" value="Save" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
