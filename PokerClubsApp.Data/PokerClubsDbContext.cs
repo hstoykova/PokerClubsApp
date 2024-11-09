@@ -22,16 +22,12 @@ namespace PokerClubsApp.Data
         public virtual DbSet<Player> Players { get; set; } = null!;
         public virtual DbSet<Union> Unions { get; set; } = null!;
         public virtual DbSet<GameType> GamesTypes { get; set; } = null!;
-        public virtual DbSet<PlayedGame> PlayedGames { get; set; } = null!;
         public virtual DbSet<PlayerGame> PlayersGames { get; set; } = null!;
         public virtual DbSet<PlayerClub> PlayersClubs { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Entity<PlayerGame>()
-                .HasKey(pg => new { pg.PlayerAccountId, pg.GameId });
 
             modelBuilder.Entity<PlayerClub>()
                 .HasKey(pc => new { pc.PlayerAccountId, pc.ClubId });
