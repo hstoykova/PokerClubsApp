@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static PokerClubsApp.Common.EntityValidationConstants.Player;
+using static PokerClubsApp.Common.EntityValidationConstants.GameResult;
 
 namespace PokerClubsApp.Web.ViewModels.Game
 {
@@ -25,10 +25,14 @@ namespace PokerClubsApp.Web.ViewModels.Game
         public decimal Result { get; set; }
 
         [Required]
+        [Range(FeeMinValue, FeeMaxValue)]
         public decimal Fee { get; set; }
 
         [Required]
-        public DateTime EndedAt { get; set; }
+        public string FromDate { get; set; } = DateTime.Today.ToString(FromDateFormat);
+
+        [Required]
+        public string ToDate { get; set; } = DateTime.Today.ToString(ToDateFormat);
 
         [Required]
         public int GameTypeId { get; set; }

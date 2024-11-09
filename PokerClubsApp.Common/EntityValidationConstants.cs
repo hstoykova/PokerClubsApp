@@ -24,5 +24,12 @@
             public const int GameTypeNameMaxLength = 50;
         }
         
+        public static class GameResult
+        {
+            public const string FromDateFormat = "dd-MM-yyyy";
+            public const string ToDateFormat = "dd-MM-yyyy";
+            public const double FeeMinValue = 0.01d;
+            public const double FeeMaxValue = int.MaxValue;
+        }
     }
 }

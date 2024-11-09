@@ -21,6 +21,7 @@ namespace PokerClubsApp.Data.Models
         public virtual GameType GameType { get; set; } = null!;
 
         public DateTime FromDate { get; set; }
+
         public DateTime ToDate { get; set; }
 
         public decimal Result { get; set; }
