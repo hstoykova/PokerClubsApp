@@ -6,8 +6,6 @@ namespace PokerClubsApp.Data.Models
 {
     public class PlayerGame
     {
-        public int Id { get; set; }
-
         public int PlayerAccountId { get; set; }
 
         [ForeignKey(nameof(PlayerAccountId))]

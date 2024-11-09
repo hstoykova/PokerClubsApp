@@ -24,6 +24,7 @@ namespace PokerClubsApp.Data
         public virtual DbSet<GameType> GamesTypes { get; set; } = null!;
         public virtual DbSet<PlayedGame> PlayedGames { get; set; } = null!;
         public virtual DbSet<PlayerGame> PlayersGames { get; set; } = null!;
+        public virtual DbSet<PlayerClub> PlayersClubs { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -31,6 +32,9 @@ namespace PokerClubsApp.Data
 
             modelBuilder.Entity<PlayerGame>()
                 .HasKey(pg => new { pg.PlayerAccountId, pg.GameId });
+
+            modelBuilder.Entity<PlayerClub>()
+                .HasKey(pc => new { pc.PlayerAccountId, pc.ClubId });
 
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
