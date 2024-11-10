@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PokerClubsApp.Data;
 using PokerClubsApp.Data.Models;
 using PokerClubsApp.Web.ViewModels.Game;
+using PokerClubsApp.Web.ViewModels.GameResults;
 using System.Globalization;
 using static PokerClubsApp.Common.EntityValidationConstants.GameResult;
 
@@ -119,13 +120,46 @@ namespace PokerClubsApp.Controllers
 
             await context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Details));
+            return RedirectToAction(nameof(Details), new { id = playerGame.Id });
         }
 
         [HttpGet]
-        public async Task<IActionResult> Details()
+        public async Task<IActionResult> Details(int id)
         {
-            return View();
+            var model = await context.PlayersClubs.Join(context.Players, pc => pc.PlayerAccountId, p => p.AccountId, (pc, p) => new
+            {
+                p.AccountId,
+                p.Nickname,
+                pc.ClubId
+            })
+                .Join(context.Clubs, p => p.ClubId, c => c.Id, (p, c) => new
+                {
+                    p.AccountId,
+                    p.Nickname,
+                    p.ClubId,
+                    c.UnionId,
+                    UnionName = c.Union.Name,
+                    ClubName = c.Name
+                })
+                .Join(context.PlayersGames, p => p.AccountId, pg => pg.PlayerAccountId, (p, pg) => new GameResultDetailsModel()
+            {
+                Id = pg.Id,
+                UnionName = p.UnionName,
+                ClubId = p.ClubId,
+                ClubName = p.ClubName,
+                PlayerAccountId = pg.PlayerAccountId,
+                Nickname = p.Nickname,
+                UnionId = p.UnionId,
+                Result = pg.Result,
+                Fee = pg.Fee,
+                FromDate = pg.FromDate,
+                ToDate = pg.ToDate,
+                GameType = pg.GameType.Name
+            }).Where(g => g.Id == id)
+            .FirstOrDefaultAsync();
+      
+
+            return View(model);
         }
 
         private async Task<List<GameType>> GetAllGameTypes()
