@@ -85,7 +85,7 @@ namespace PokerClubsApp.Controllers
 
             var player = await context.Players
                 .Where(p => p.AccountId == model.AccountId)
-                .Include(p => p.PlayersClubs)
+                .Include(p => p.Memberships)
                 .FirstOrDefaultAsync();
 
             // TODO If player is new - add button for adding new player
@@ -95,20 +95,25 @@ namespace PokerClubsApp.Controllers
 
             //}
 
-            if (!player.PlayersClubs.Any(pc => pc.ClubId == model.ClubId))
+            var membership = await context.Memberships
+                .Where(m => m.ClubId == model.ClubId && m.PlayerAccountId == model.AccountId)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+
+            if (membership == null)
             {
-                PlayerClub playerClub = new PlayerClub() 
+                membership = new Membership()
                 {
                     Player = player!,
                     ClubId = model.ClubId
                 };
 
-                await context.PlayersClubs.AddAsync(playerClub);
+                await context.Memberships.AddAsync(membership);
             }
 
             PlayerGame playerGame = new PlayerGame()
             {
-                Player = player!,
+                Membership = membership!,
                 GameTypeId = model.GameTypeId,
                 FromDate = fromDate,
                 ToDate = toDate,
@@ -126,38 +131,22 @@ namespace PokerClubsApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            var model = await context.PlayersClubs.Join(context.Players, pc => pc.PlayerAccountId, p => p.AccountId, (pc, p) => new
-            {
-                p.AccountId,
-                p.Nickname,
-                pc.ClubId
-            })
-                .Join(context.Clubs, p => p.ClubId, c => c.Id, (p, c) => new
+            var model = await context.PlayersGames
+                .Where(pg => pg.Id == id)
+                .AsNoTracking()
+                .Select(pg => new GameResultDetailsModel()
                 {
-                    p.AccountId,
-                    p.Nickname,
-                    p.ClubId,
-                    c.UnionId,
-                    UnionName = c.Union.Name,
-                    ClubName = c.Name
+                    UnionName = pg.Membership.Club.Union.Name,
+                    PlayerAccountId = pg.Membership.PlayerAccountId,
+                    Nickname = pg.Membership.Player.Nickname,
+                    ClubName = pg.Membership.Club.Name,
+                    Result = pg.Result,
+                    Fee = pg.Fee,
+                    FromDate = pg.FromDate,
+                    ToDate = pg.ToDate,
+                    GameType = pg.GameType.Name
                 })
-                .Join(context.PlayersGames, p => p.AccountId, pg => pg.PlayerAccountId, (p, pg) => new GameResultDetailsModel()
-            {
-                Id = pg.Id,
-                UnionName = p.UnionName,
-                ClubId = p.ClubId,
-                ClubName = p.ClubName,
-                PlayerAccountId = pg.PlayerAccountId,
-                Nickname = p.Nickname,
-                UnionId = p.UnionId,
-                Result = pg.Result,
-                Fee = pg.Fee,
-                FromDate = pg.FromDate,
-                ToDate = pg.ToDate,
-                GameType = pg.GameType.Name
-            }).Where(g => g.Id == id)
-            .FirstOrDefaultAsync();
-      
+                .FirstOrDefaultAsync();
 
             return View(model);
         }

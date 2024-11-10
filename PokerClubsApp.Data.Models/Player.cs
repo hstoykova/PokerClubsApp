@@ -13,6 +13,6 @@ namespace PokerClubsApp.Data.Models
         [MaxLength(PlayerNicknameMaxLength)] 
         public string Nickname { get; set; } = null!;
 
-        public virtual List<PlayerClub> PlayersClubs { get; set; } = new();
+        public virtual List<Membership> Memberships { get; set; } = new();
     }
 }

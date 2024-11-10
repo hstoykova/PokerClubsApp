@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PokerClubsApp.Data;
 
@@ -11,9 +12,11 @@ using PokerClubsApp.Data;
 namespace PokerClubsApp.Data.Migrations
 {
     [DbContext(typeof(PokerClubsDbContext))]
-    partial class PokerClubsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241110151659_RemovedPlayerGamePlayersRelation")]
+    partial class RemovedPlayerGamePlayersRelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -367,9 +370,6 @@ namespace PokerClubsApp.Data.Migrations
                     b.Property<int>("GameTypeId")
                         .HasColumnType("int");
 
-                    b.Property<int>("MembershipId")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("Result")
                         .HasColumnType("decimal(18,2)");
 
@@ -379,8 +379,6 @@ namespace PokerClubsApp.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("GameTypeId");
-
-                    b.HasIndex("MembershipId");
 
                     b.ToTable("PlayersGames");
                 });
@@ -509,15 +507,7 @@ namespace PokerClubsApp.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PokerClubsApp.Data.Models.Membership", "Membership")
-                        .WithMany()
-                        .HasForeignKey("MembershipId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("GameType");
-
-                    b.Navigation("Membership");
                 });
 
             modelBuilder.Entity("PokerClubsApp.Data.Models.Player", b =>

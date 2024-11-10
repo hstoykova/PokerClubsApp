@@ -10,10 +10,10 @@ namespace PokerClubsApp.Data.Models
         [Key]
         public int Id { get; set; }
 
-        public int PlayerAccountId { get; set; }
+        public int MembershipId { get; set; }
 
-        [ForeignKey(nameof(PlayerAccountId))]
-        public virtual Player Player { get; set; } = null!;
+        [ForeignKey(nameof(MembershipId))]
+        public virtual Membership Membership { get; set; } = null!;
 
         public int GameTypeId { get; set; }
 

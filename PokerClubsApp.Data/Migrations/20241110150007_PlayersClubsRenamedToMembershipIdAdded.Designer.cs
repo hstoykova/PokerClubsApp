@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PokerClubsApp.Data;
 
@@ -11,9 +12,11 @@ using PokerClubsApp.Data;
 namespace PokerClubsApp.Data.Migrations
 {
     [DbContext(typeof(PokerClubsDbContext))]
-    partial class PokerClubsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241110150007_PlayersClubsRenamedToMembershipIdAdded")]
+    partial class PlayersClubsRenamedToMembershipIdAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -323,11 +326,9 @@ namespace PokerClubsApp.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PlayerAccountId");
+                    b.HasIndex("ClubId");
 
-                    b.HasIndex("ClubId", "PlayerAccountId")
-                        .IsUnique()
-                        .HasDatabaseName("IX_Memberships_Club_PlayerAccountId");
+                    b.HasIndex("PlayerAccountId");
 
                     b.ToTable("Memberships");
                 });
@@ -367,7 +368,7 @@ namespace PokerClubsApp.Data.Migrations
                     b.Property<int>("GameTypeId")
                         .HasColumnType("int");
 
-                    b.Property<int>("MembershipId")
+                    b.Property<int>("PlayerAccountId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Result")
@@ -380,7 +381,7 @@ namespace PokerClubsApp.Data.Migrations
 
                     b.HasIndex("GameTypeId");
 
-                    b.HasIndex("MembershipId");
+                    b.HasIndex("PlayerAccountId");
 
                     b.ToTable("PlayersGames");
                 });
@@ -491,7 +492,7 @@ namespace PokerClubsApp.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("PokerClubsApp.Data.Models.Player", "Player")
-                        .WithMany("Memberships")
+                        .WithMany("PlayersClubs")
                         .HasForeignKey("PlayerAccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -509,20 +510,20 @@ namespace PokerClubsApp.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PokerClubsApp.Data.Models.Membership", "Membership")
+                    b.HasOne("PokerClubsApp.Data.Models.Player", "Player")
                         .WithMany()
-                        .HasForeignKey("MembershipId")
+                        .HasForeignKey("PlayerAccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("GameType");
 
-                    b.Navigation("Membership");
+                    b.Navigation("Player");
                 });
 
             modelBuilder.Entity("PokerClubsApp.Data.Models.Player", b =>
                 {
-                    b.Navigation("Memberships");
+                    b.Navigation("PlayersClubs");
                 });
 #pragma warning restore 612, 618
         }

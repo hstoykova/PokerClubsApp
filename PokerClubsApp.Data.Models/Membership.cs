@@ -4,8 +4,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PokerClubsApp.Data.Models
 {
-    public class PlayerClub
+    public class Membership
     {
+        [Key]
+        public int Id { get; set; }
+
         public int PlayerAccountId { get; set; }
 
         [ForeignKey(nameof(PlayerAccountId))]

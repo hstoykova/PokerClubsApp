@@ -23,14 +23,16 @@ namespace PokerClubsApp.Data
         public virtual DbSet<Union> Unions { get; set; } = null!;
         public virtual DbSet<GameType> GamesTypes { get; set; } = null!;
         public virtual DbSet<PlayerGame> PlayersGames { get; set; } = null!;
-        public virtual DbSet<PlayerClub> PlayersClubs { get; set; } = null!;
+        public virtual DbSet<Membership> Memberships { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<PlayerClub>()
-                .HasKey(pc => new { pc.PlayerAccountId, pc.ClubId });
+            modelBuilder.Entity<Membership>()
+                .HasIndex(m => new { m.ClubId, m.PlayerAccountId })
+                .HasDatabaseName("IX_Memberships_Club_PlayerAccountId")
+                .IsUnique();
 
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
