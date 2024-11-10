@@ -29,12 +29,12 @@
             </div>
             <div class="mb-3">
                 <label asp-for="@Model.Result" class="form-label-add-edit">Result</label>
-                <input asp-for="@Model.Result" class="form-control" aria-required="true" />
+                <input asp-for="@Model.Result" class="form-control" aria-required="true" type="number" step=".01"/>
                 <span asp-validation-for="@Model.Result" class="text-danger"></span>
             </div>
             <div class="mb-3">
                 <label asp-for="@Model.Fee" class="form-label-add-edit">Fee</label>
-                <input asp-for="@Model.Fee" class="form-control" aria-required="true" />
+                <input asp-for="@Model.Fee" class="form-control" aria-required="true" type="number" step=".01"/>
                 <span asp-validation-for="@Model.Fee" class="text-danger"></span>
             </div>
             <div class="mb-3">
