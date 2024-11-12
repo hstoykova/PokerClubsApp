@@ -24,7 +24,7 @@ namespace PokerClubsApp.Controllers
             var model = new AddGameResultsModel();
             model.GameTypes = await GetAllGameTypes();
             model.Clubs = await GetAllClubs();
-            model.Players = await GetAllPlaters();
+            model.Players = await GetAllPlayers();
 
             return this.View(model);
         }
@@ -36,7 +36,7 @@ namespace PokerClubsApp.Controllers
             {
                 model.GameTypes = await GetAllGameTypes();
                 model.Clubs = await GetAllClubs();
-                model.Players = await GetAllPlaters();
+                model.Players = await GetAllPlayers();
 
                 return View(model);
             }
@@ -47,7 +47,7 @@ namespace PokerClubsApp.Controllers
                 ModelState.AddModelError(nameof(model.FromDate), "Invalid date format");
                 model.GameTypes = await GetAllGameTypes();
                 model.Clubs = await GetAllClubs();
-                model.Players = await GetAllPlaters();
+                model.Players = await GetAllPlayers();
 
                 return View(model);
             }
@@ -58,7 +58,7 @@ namespace PokerClubsApp.Controllers
                 ModelState.AddModelError(nameof(model.ToDate), "Invalid date format");
                 model.GameTypes = await GetAllGameTypes();
                 model.Clubs = await GetAllClubs();
-                model.Players = await GetAllPlaters();
+                model.Players = await GetAllPlayers();
 
                 return View(model);
             }
@@ -68,7 +68,7 @@ namespace PokerClubsApp.Controllers
                 ModelState.AddModelError(nameof(model.FromDate), "From date must be Monday and earlier than To date!");
                 model.GameTypes = await GetAllGameTypes();
                 model.Clubs = await GetAllClubs();
-                model.Players = await GetAllPlaters();
+                model.Players = await GetAllPlayers();
 
                 return View(model);
             }
@@ -78,7 +78,7 @@ namespace PokerClubsApp.Controllers
                 ModelState.AddModelError(nameof(model.ToDate), "To date must be Sunday and later than From date!");
                 model.GameTypes = await GetAllGameTypes();
                 model.Clubs = await GetAllClubs();
-                model.Players = await GetAllPlaters();
+                model.Players = await GetAllPlayers();
 
                 return View(model);
             }
@@ -133,6 +133,7 @@ namespace PokerClubsApp.Controllers
         {
             var model = await context.PlayersGames
                 .Where(pg => pg.Id == id)
+                .Where(pg => pg.IsDeleted == false)
                 .AsNoTracking()
                 .Select(pg => new GameResultDetailsModel()
                 {
@@ -151,6 +152,122 @@ namespace PokerClubsApp.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var model = await context.PlayersGames
+                .Where(pg => pg.Id == id)
+                .Where(pg => pg.IsDeleted == false)
+                .AsNoTracking()
+                .Select(pg => new EditGameResultsModel()
+                {
+                    Nickname = pg.Membership.Player.Nickname,
+                    ClubId = pg.Membership.ClubId,
+                    Result = pg.Result,
+                    Fee = pg.Fee,
+                    FromDate = pg.FromDate.ToString(FromDateFormat),
+                    ToDate = pg.ToDate.ToString(ToDateFormat),
+                    GameTypeId = pg.GameTypeId
+                })
+                .FirstOrDefaultAsync();
+
+            if (model == null)
+            {
+                return NotFound();
+            }
+
+            model.GameTypes = await GetAllGameTypes();
+            model.Clubs = await GetAllClubs();
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditGameResultsModel model, int id)
+        {
+            if (ModelState.IsValid == false)
+            {
+                model.GameTypes = await GetAllGameTypes();
+                model.Clubs = await GetAllClubs();
+
+                return View(model);
+            }
+
+            DateTime fromDate;
+            if (DateTime.TryParseExact(model.FromDate, FromDateFormat, CultureInfo.CurrentCulture, DateTimeStyles.None, out fromDate) == false)
+            {
+                ModelState.AddModelError(nameof(model.FromDate), "Invalid date format");
+                model.GameTypes = await GetAllGameTypes();
+                model.Clubs = await GetAllClubs();
+
+                return View(model);
+            }
+
+            DateTime toDate;
+            if (DateTime.TryParseExact(model.ToDate, FromDateFormat, CultureInfo.CurrentCulture, DateTimeStyles.None, out toDate) == false)
+            {
+                ModelState.AddModelError(nameof(model.ToDate), "Invalid date format");
+                model.GameTypes = await GetAllGameTypes();
+                model.Clubs = await GetAllClubs();
+
+                return View(model);
+            }
+
+            if (fromDate.DayOfWeek != DayOfWeek.Monday || fromDate > toDate)
+            {
+                ModelState.AddModelError(nameof(model.FromDate), "From date must be Monday and earlier than To date!");
+                model.GameTypes = await GetAllGameTypes();
+                model.Clubs = await GetAllClubs();
+
+                return View(model);
+            }
+
+            if (toDate.DayOfWeek != DayOfWeek.Sunday || toDate < fromDate)
+            {
+                ModelState.AddModelError(nameof(model.ToDate), "To date must be Sunday and later than From date!");
+                model.GameTypes = await GetAllGameTypes();
+                model.Clubs = await GetAllClubs();
+
+                return View(model);
+            }
+
+            PlayerGame? playerGame = await context.PlayersGames.FindAsync(id);
+
+            if (playerGame == null || playerGame.IsDeleted)
+            {
+                return NotFound();
+            }
+
+            var player = playerGame.Membership.Player;
+
+            var membership = await context.Memberships
+                .Where(m => m.ClubId == model.ClubId && m.PlayerAccountId == player.AccountId)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+
+            if (membership == null)
+            {
+                membership = new Membership()
+                {
+                    Player = player!,
+                    ClubId = model.ClubId
+                };
+
+                await context.Memberships.AddAsync(membership);
+            }
+
+            playerGame.Membership = membership;
+            playerGame.GameTypeId = model.GameTypeId;
+            playerGame.FromDate = fromDate;
+            playerGame.ToDate = toDate;
+            playerGame.Result = model.Result;
+            playerGame.Fee = model.Fee;
+
+            await context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Details), new { id = playerGame.Id });
+        }
+
         private async Task<List<GameType>> GetAllGameTypes()
         {
             return await context.GamesTypes.ToListAsync();
@@ -158,12 +275,16 @@ namespace PokerClubsApp.Controllers
 
         private async Task<List<Club>> GetAllClubs()
         {
-            return await context.Clubs.ToListAsync();
+            return await context.Clubs
+                .Where(c => c.IsDeleted == false)
+                .ToListAsync();
         }
 
-        private async Task<List<Player>> GetAllPlaters()
+        private async Task<List<Player>> GetAllPlayers()
         {
-            return await context.Players.ToListAsync();
+            return await context.Players
+                .Where(p => p.IsDeleted == false)
+                .ToListAsync();
         }
     }
 }
