@@ -18,5 +18,7 @@ namespace PokerClubsApp.Data.Models
 
         [ForeignKey(nameof(ClubId))]
         public virtual Club Club { get; set; } = null!;
+
+        public bool IsDeleted { get; set; }
     }
 }

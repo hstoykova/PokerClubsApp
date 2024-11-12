@@ -11,5 +11,7 @@ namespace PokerClubsApp.Data.Models
         [Required]
         [MaxLength(UnionNameMaxLength)]
         public string Name { get; set; } = null!;
+
+        public bool IsDeleted { get; set; }
     }
 }

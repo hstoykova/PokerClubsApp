@@ -27,5 +27,7 @@ namespace PokerClubsApp.Data.Models
         public decimal Result { get; set; }
 
         public decimal Fee { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 }

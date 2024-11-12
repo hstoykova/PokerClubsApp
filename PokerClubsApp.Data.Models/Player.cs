@@ -14,5 +14,7 @@ namespace PokerClubsApp.Data.Models
         public string Nickname { get; set; } = null!;
 
         public virtual List<Membership> Memberships { get; set; } = new();
+
+        public bool IsDeleted { get; set; }
     }
 }
