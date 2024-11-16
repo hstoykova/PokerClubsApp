@@ -137,6 +137,7 @@ namespace PokerClubsApp.Controllers
                 .AsNoTracking()
                 .Select(pg => new GameResultDetailsModel()
                 {
+                    Id = pg.Id,
                     UnionName = pg.Membership.Club.Union.Name,
                     PlayerAccountId = pg.Membership.PlayerAccountId,
                     Nickname = pg.Membership.Player.Nickname,
@@ -270,6 +271,22 @@ namespace PokerClubsApp.Controllers
             await context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Details), new { id = playerGame.Id });
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            var model = await context.PlayersGames.FindAsync(id);
+
+            if (model == null)
+            {
+                return NotFound();
+            }
+
+            model.IsDeleted = true;
+
+            await context.SaveChangesAsync();
+
+            return RedirectToAction("Index", "Home");
         }
 
         private async Task<List<GameType>> GetAllGameTypes()
