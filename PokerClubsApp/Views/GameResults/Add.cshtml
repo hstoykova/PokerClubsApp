@@ -14,48 +14,48 @@
     <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
         <form asp-action="Add" method="post">
             <div class="mb-3">
-                <label asp-for="@Model.AccountId" class="form-label-add-edit">Nickname</label>
+                <label asp-for="@Model.AccountId" class="form-label-add-edit fw-bold">Nickname</label>
                 <select asp-for="@Model.AccountId" class="form-control" aria-required="true" asp-items="@(new SelectList(Model.Players, "AccountId", "Nickname"))">
                     <option value="">Select Account...</option>
                 </select>
                 <span asp-validation-for="@Model.AccountId" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <label asp-for="@Model.ClubId" class="form-label-add-edit">Club Name</label>
+                <label asp-for="@Model.ClubId" class="form-label-add-edit fw-bold">Club Name</label>
                 <select asp-for="@Model.ClubId" class="form-control" aria-required="true" asp-items="@(new SelectList(Model.Clubs, "Id", "Name"))">
                     <option value="">Select Club...</option>
                 </select>
                 <span asp-validation-for="@Model.ClubId" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <label asp-for="@Model.Result" class="form-label-add-edit">Result</label>
+                <label asp-for="@Model.Result" class="form-label-add-edit fw-bold">Result</label>
                 <input asp-for="@Model.Result" class="form-control" aria-required="true" type="number" step=".01"/>
                 <span asp-validation-for="@Model.Result" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <label asp-for="@Model.Fee" class="form-label-add-edit">Fee</label>
+                <label asp-for="@Model.Fee" class="form-label-add-edit fw-bold">Fee</label>
                 <input asp-for="@Model.Fee" class="form-control" aria-required="true" type="number" step=".01"/>
                 <span asp-validation-for="@Model.Fee" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <label asp-for="@Model.FromDate" class="form-label-add-edit">From</label>
+                <label asp-for="@Model.FromDate" class="form-label-add-edit fw-bold">From</label>
                 <input asp-for="@Model.FromDate" class="form-control" aria-required="true" value="@(string.IsNullOrEmpty(Model.FromDate) ? today : Model.FromDate)" />
                 <span asp-validation-for="@Model.FromDate" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <label asp-for="@Model.ToDate" class="form-label-add-edit">To</label>
+                <label asp-for="@Model.ToDate" class="form-label-add-edit fw-bold">To</label>
                 <input asp-for="@Model.ToDate" class="form-control" aria-required="true" value="@(string.IsNullOrEmpty(Model.ToDate) ? today : Model.ToDate)" />
                 <span asp-validation-for="@Model.ToDate" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <label asp-for="@Model.GameTypeId" class="form-label-add-edit">Game Type</label>
+                <label asp-for="@Model.GameTypeId" class="form-label-add-edit fw-bold">Game Type</label>
                 <select asp-for="@Model.GameTypeId" class="form-control" aria-required="true" asp-items="@(new SelectList(Model.GameTypes, "Id", "Name"))">
                     <option value="">Select Game Type...</option>
                 </select>
                 <span asp-validation-for="@Model.GameTypeId" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <input class="btn btn-warning btn-dark-text mb-2 w-100 py-3 fw-bold rounded" type="submit" value="Save" />
+                <input class="btn btn-primary btn-dark-text mb-2 w-100 py-3 fw-bold rounded" type="submit" value="Save" />
             </div>
         </form>
     </div>
