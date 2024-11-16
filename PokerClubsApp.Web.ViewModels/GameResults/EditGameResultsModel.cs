@@ -12,6 +12,7 @@ namespace PokerClubsApp.Web.ViewModels.GameResults
 {
     public class EditGameResultsModel
     {
+        [Required]
         public string Nickname { get; set; } = null!;
 
         [Required]

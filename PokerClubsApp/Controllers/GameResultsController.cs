@@ -238,10 +238,14 @@ namespace PokerClubsApp.Controllers
                 return NotFound();
             }
 
-            var player = playerGame.Membership.Player;
+            var player = await context.Memberships
+                .Where(m => m.Id == playerGame.MembershipId)
+                .AsNoTracking()
+                .Select(m => m.Player)
+                .FirstOrDefaultAsync();
 
             var membership = await context.Memberships
-                .Where(m => m.ClubId == model.ClubId && m.PlayerAccountId == player.AccountId)
+                .Where(m => m.ClubId == model.ClubId && m.PlayerAccountId == player!.AccountId)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
 
