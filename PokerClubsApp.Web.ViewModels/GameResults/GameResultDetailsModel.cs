@@ -10,6 +10,8 @@ namespace PokerClubsApp.Web.ViewModels.GameResults
 {
     public class GameResultDetailsModel
     {
+        public int Id { get; set; }
+
         public string UnionName { get; set; } = null!;
 
         public int PlayerAccountId { get; set; }
