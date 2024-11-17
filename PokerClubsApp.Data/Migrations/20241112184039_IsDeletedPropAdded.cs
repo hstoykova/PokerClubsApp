@@ -19,7 +19,7 @@ namespace PokerClubsApp.Data.Migrations
 
             migrationBuilder.AddColumn<bool>(
                 name: "IsDeleted",
-                table: "PlayersGames",
+                table: "GameResults",
                 type: "bit",
                 nullable: false,
                 defaultValue: false);
@@ -97,7 +97,7 @@ namespace PokerClubsApp.Data.Migrations
 
             migrationBuilder.DropColumn(
                 name: "IsDeleted",
-                table: "PlayersGames");
+                table: "GameResults");
 
             migrationBuilder.DropColumn(
                 name: "IsDeleted",

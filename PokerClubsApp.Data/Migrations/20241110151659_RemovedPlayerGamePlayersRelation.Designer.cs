@@ -380,7 +380,7 @@ namespace PokerClubsApp.Data.Migrations
 
                     b.HasIndex("GameTypeId");
 
-                    b.ToTable("PlayersGames");
+                    b.ToTable("GameResults");
                 });
 
             modelBuilder.Entity("PokerClubsApp.Data.Models.Union", b =>

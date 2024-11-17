@@ -5,25 +5,18 @@
 namespace PokerClubsApp.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class PlayerGameTableDropId : Migration
+    public partial class PlayerGameEntityNameChangedToGameResult : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "Id",
-                table: "GameResults");
+            migrationBuilder.RenameTable("PlayersGames", null, "GameResults", null);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<int>(
-                name: "Id",
-                table: "GameResults",
-                type: "int",
-                nullable: false,
-                defaultValue: 0);
+            migrationBuilder.RenameTable("GameResults", null, "PlayersGames", null);
         }
     }
 }

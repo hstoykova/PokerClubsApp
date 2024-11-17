@@ -390,7 +390,7 @@ namespace PokerClubsApp.Data.Migrations
 
                     b.HasIndex("GameId");
 
-                    b.ToTable("PlayersGames");
+                    b.ToTable("GameResults");
                 });
 
             modelBuilder.Entity("PokerClubsApp.Data.Models.Union", b =>

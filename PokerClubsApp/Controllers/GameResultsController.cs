@@ -111,7 +111,7 @@ namespace PokerClubsApp.Controllers
                 await context.Memberships.AddAsync(membership);
             }
 
-            PlayerGame playerGame = new PlayerGame()
+            GameResult playerGame = new GameResult()
             {
                 Membership = membership!,
                 GameTypeId = model.GameTypeId,
@@ -121,7 +121,7 @@ namespace PokerClubsApp.Controllers
                 Fee = model.Fee
             };
 
-            await context.PlayersGames.AddAsync(playerGame);
+            await context.GameResults.AddAsync(playerGame);
 
             await context.SaveChangesAsync();
 
@@ -131,7 +131,7 @@ namespace PokerClubsApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            var model = await context.PlayersGames
+            var model = await context.GameResults
                 .Where(pg => pg.Id == id)
                 .Where(pg => pg.IsDeleted == false)
                 .AsNoTracking()
@@ -156,7 +156,7 @@ namespace PokerClubsApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            var model = await context.PlayersGames
+            var model = await context.GameResults
                 .Where(pg => pg.Id == id)
                 .Where(pg => pg.IsDeleted == false)
                 .AsNoTracking()
@@ -232,7 +232,7 @@ namespace PokerClubsApp.Controllers
                 return View(model);
             }
 
-            PlayerGame? playerGame = await context.PlayersGames.FindAsync(id);
+            GameResult? playerGame = await context.GameResults.FindAsync(id);
 
             if (playerGame == null || playerGame.IsDeleted)
             {
@@ -275,7 +275,7 @@ namespace PokerClubsApp.Controllers
 
         public async Task<IActionResult> Delete(int id)
         {
-            var model = await context.PlayersGames.FindAsync(id);
+            var model = await context.GameResults.FindAsync(id);
 
             if (model == null)
             {

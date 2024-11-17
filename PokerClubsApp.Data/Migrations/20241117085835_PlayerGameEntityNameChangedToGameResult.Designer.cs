@@ -12,8 +12,8 @@ using PokerClubsApp.Data;
 namespace PokerClubsApp.Data.Migrations
 {
     [DbContext(typeof(PokerClubsDbContext))]
-    [Migration("20241112184039_IsDeletedPropAdded")]
-    partial class IsDeletedPropAdded
+    [Migration("20241117085835_PlayerGameEntityNameChangedToGameResult")]
+    partial class PlayerGameEntityNameChangedToGameResult
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -276,6 +276,44 @@ namespace PokerClubsApp.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("PokerClubsApp.Data.Models.GameResult", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Fee")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("FromDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("GameTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("MembershipId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Result")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("ToDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GameTypeId");
+
+                    b.HasIndex("MembershipId");
+
+                    b.ToTable("GameResults");
+                });
+
             modelBuilder.Entity("PokerClubsApp.Data.Models.GameType", b =>
                 {
                     b.Property<int>("Id")
@@ -363,44 +401,6 @@ namespace PokerClubsApp.Data.Migrations
                     b.HasKey("AccountId");
 
                     b.ToTable("Players");
-                });
-
-            modelBuilder.Entity("PokerClubsApp.Data.Models.PlayerGame", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("Fee")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("FromDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("GameTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("MembershipId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Result")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("ToDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GameTypeId");
-
-                    b.HasIndex("MembershipId");
-
-                    b.ToTable("GameResults");
                 });
 
             modelBuilder.Entity("PokerClubsApp.Data.Models.Union", b =>
@@ -506,6 +506,25 @@ namespace PokerClubsApp.Data.Migrations
                     b.Navigation("Union");
                 });
 
+            modelBuilder.Entity("PokerClubsApp.Data.Models.GameResult", b =>
+                {
+                    b.HasOne("PokerClubsApp.Data.Models.GameType", "GameType")
+                        .WithMany()
+                        .HasForeignKey("GameTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PokerClubsApp.Data.Models.Membership", "Membership")
+                        .WithMany()
+                        .HasForeignKey("MembershipId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("GameType");
+
+                    b.Navigation("Membership");
+                });
+
             modelBuilder.Entity("PokerClubsApp.Data.Models.Membership", b =>
                 {
                     b.HasOne("PokerClubsApp.Data.Models.Club", "Club")
@@ -523,25 +542,6 @@ namespace PokerClubsApp.Data.Migrations
                     b.Navigation("Club");
 
                     b.Navigation("Player");
-                });
-
-            modelBuilder.Entity("PokerClubsApp.Data.Models.PlayerGame", b =>
-                {
-                    b.HasOne("PokerClubsApp.Data.Models.GameType", "GameType")
-                        .WithMany()
-                        .HasForeignKey("GameTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PokerClubsApp.Data.Models.Membership", "Membership")
-                        .WithMany()
-                        .HasForeignKey("MembershipId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("GameType");
-
-                    b.Navigation("Membership");
                 });
 
             modelBuilder.Entity("PokerClubsApp.Data.Models.Player", b =>

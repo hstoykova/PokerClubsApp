@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PokerClubsApp.Data.Models
 {
-    public class PlayerGame
+    public class GameResult
     {
         [Key]
         public int Id { get; set; }

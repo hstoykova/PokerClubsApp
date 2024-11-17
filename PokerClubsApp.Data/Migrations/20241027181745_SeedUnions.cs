@@ -15,11 +15,11 @@ namespace PokerClubsApp.Data.Migrations
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_PlayersGames_Players_PlayerId",
-                table: "PlayersGames");
+                table: "GameResults");
 
             migrationBuilder.RenameColumn(
                 name: "PlayerId",
-                table: "PlayersGames",
+                table: "GameResults",
                 newName: "PlayerAccountId");
 
             migrationBuilder.CreateTable(
@@ -218,7 +218,7 @@ namespace PokerClubsApp.Data.Migrations
 
             migrationBuilder.AddForeignKey(
                 name: "FK_PlayersGames_Players_PlayerAccountId",
-                table: "PlayersGames",
+                table: "GameResults",
                 column: "PlayerAccountId",
                 principalTable: "Players",
                 principalColumn: "AccountId",
@@ -230,7 +230,7 @@ namespace PokerClubsApp.Data.Migrations
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_PlayersGames_Players_PlayerAccountId",
-                table: "PlayersGames");
+                table: "GameResults");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
@@ -270,12 +270,12 @@ namespace PokerClubsApp.Data.Migrations
 
             migrationBuilder.RenameColumn(
                 name: "PlayerAccountId",
-                table: "PlayersGames",
+                table: "GameResults",
                 newName: "PlayerId");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_PlayersGames_Players_PlayerId",
-                table: "PlayersGames",
+                table: "GameResults",
                 column: "PlayerId",
                 principalTable: "Players",
                 principalColumn: "AccountId",

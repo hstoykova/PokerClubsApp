@@ -98,7 +98,7 @@ namespace PokerClubsApp.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PlayersGames",
+                name: "GameResults",
                 columns: table => new
                 {
                     PlayerId = table.Column<int>(type: "int", nullable: false),
@@ -141,7 +141,7 @@ namespace PokerClubsApp.Data.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_PlayersGames_GameId",
-                table: "PlayersGames",
+                table: "GameResults",
                 column: "GameId");
         }
 
@@ -149,7 +149,7 @@ namespace PokerClubsApp.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "PlayersGames");
+                name: "GameResults");
 
             migrationBuilder.DropTable(
                 name: "PlayedGames");
