@@ -1,6 +1,14 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PokerClubsApp.Data;
+using PokerClubsApp.Data.Models;
+using PokerClubsApp.Data.Repository;
+using PokerClubsApp.Data.Repository.Interfaces;
+using PokerClubsApp.Services.Data;
+using PokerClubsApp.Services.Data.Interfaces;
+using PokerClubsApp.Web.Infrastructure.Extensions;
+
+
 
 namespace PokerClubsApp
 {
@@ -14,6 +22,7 @@ namespace PokerClubsApp
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
             builder.Services.AddDbContext<PokerClubsDbContext>(options =>
                 options.UseSqlServer(connectionString));
+
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             builder.Services.AddDefaultIdentity<IdentityUser>(options =>
@@ -25,7 +34,18 @@ namespace PokerClubsApp
             })
                 .AddEntityFrameworkStores<PokerClubsDbContext>();
 
+            //builder.Services.RegisterRepositories(typeof(ApplicationUser).Assembly);
+            //builder.Services.RegisterUserDefinedServices(typeof(IGameResultService).Assembly);
+
+            builder.Services.AddScoped<IRepository<Club, int>, BaseRepository<Club, int>>();
+            builder.Services.AddScoped<IRepository<Player, int>, BaseRepository<Player, int>>();
+            builder.Services.AddScoped<IRepository<GameType, int>, BaseRepository<GameType, int>>();
+            builder.Services.AddScoped<IRepository<Membership, int>, BaseRepository<Membership, int>>();
+            builder.Services.AddScoped<IRepository<GameResult, int>, BaseRepository<GameResult, int>>();
+            builder.Services.AddScoped<IGameResultService, GameResultService>();
+
             builder.Services.AddControllersWithViews();
+            builder.Services.AddRazorPages();
 
             var app = builder.Build();
 
