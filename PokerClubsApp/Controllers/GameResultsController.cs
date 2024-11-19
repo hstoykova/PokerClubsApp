@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Itenso.TimePeriod;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PokerClubsApp.Data;
 using PokerClubsApp.Data.Models;
+using PokerClubsApp.Services.Data.Interfaces;
 using PokerClubsApp.Web.ViewModels.Game;
 using PokerClubsApp.Web.ViewModels.GameResults;
 using System.Globalization;
@@ -12,19 +14,28 @@ namespace PokerClubsApp.Controllers
     public class GameResultsController : Controller
     {
         private readonly PokerClubsDbContext context;
+        private readonly IGameResultService gameResultsService;
 
-        public GameResultsController(PokerClubsDbContext _context)
+        public GameResultsController(PokerClubsDbContext _context, IGameResultService gameResultsService)
         {
             context = _context;
+            this.gameResultsService = gameResultsService;
         }
 
         [HttpGet]
         public async Task<IActionResult> Add()
         {
             var model = new AddGameResultsModel();
+
+            var week = new Week(DateTime.Now);
+            var weeks = Enumerable.Range(1, 3)
+                .Select(i => week.AddWeeks(-i))
+                .ToList();
+
             model.GameTypes = await GetAllGameTypes();
             model.Clubs = await GetAllClubs();
             model.Players = await GetAllPlayers();
+            model.Weeks = weeks;
 
             return this.View(model);
         }
@@ -41,91 +52,23 @@ namespace PokerClubsApp.Controllers
                 return View(model);
             }
 
-            DateTime fromDate;
-            if (DateTime.TryParseExact(model.FromDate, FromDateFormat, CultureInfo.CurrentCulture, DateTimeStyles.None, out fromDate) == false)
+            try
             {
-                ModelState.AddModelError(nameof(model.FromDate), "Invalid date format");
-                model.GameTypes = await GetAllGameTypes();
-                model.Clubs = await GetAllClubs();
-                model.Players = await GetAllPlayers();
-
-                return View(model);
-            }
-
-            DateTime toDate;
-            if (DateTime.TryParseExact(model.ToDate, FromDateFormat, CultureInfo.CurrentCulture, DateTimeStyles.None, out toDate) == false)
-            {
-                ModelState.AddModelError(nameof(model.ToDate), "Invalid date format");
-                model.GameTypes = await GetAllGameTypes();
-                model.Clubs = await GetAllClubs();
-                model.Players = await GetAllPlayers();
-
-                return View(model);
-            }
-
-            if (fromDate.DayOfWeek != DayOfWeek.Monday || fromDate > toDate)
-            {
-                ModelState.AddModelError(nameof(model.FromDate), "From date must be Monday and earlier than To date!");
-                model.GameTypes = await GetAllGameTypes();
-                model.Clubs = await GetAllClubs();
-                model.Players = await GetAllPlayers();
-
-                return View(model);
-            }
-
-            if (toDate.DayOfWeek != DayOfWeek.Sunday || toDate < fromDate)
-            {
-                ModelState.AddModelError(nameof(model.ToDate), "To date must be Sunday and later than From date!");
-                model.GameTypes = await GetAllGameTypes();
-                model.Clubs = await GetAllClubs();
-                model.Players = await GetAllPlayers();
-
-                return View(model);
-            }
-
-            var player = await context.Players
-                .Where(p => p.AccountId == model.AccountId)
-                .Include(p => p.Memberships)
-                .FirstOrDefaultAsync();
-
-            // TODO If player is new - add button for adding new player
-
-            //if (player is null)
-            //{
-
-            //}
-
-            var membership = await context.Memberships
-                .Where(m => m.ClubId == model.ClubId && m.PlayerAccountId == model.AccountId)
-                .AsNoTracking()
-                .FirstOrDefaultAsync();
-
-            if (membership == null)
-            {
-                membership = new Membership()
+                var gameResultId = await gameResultsService.AddGameResultAsync(model);
+                return RedirectToAction(nameof(Details), new
                 {
-                    Player = player!,
-                    ClubId = model.ClubId
-                };
-
-                await context.Memberships.AddAsync(membership);
+                    id = gameResultId
+                });
             }
-
-            GameResult playerGame = new GameResult()
+            catch (ArgumentException e)
             {
-                Membership = membership!,
-                GameTypeId = model.GameTypeId,
-                FromDate = fromDate,
-                ToDate = toDate,
-                Result = model.Result,
-                Fee = model.Fee
-            };
+                ModelState.AddModelError(e.ParamName!, e.Message);
+                model.GameTypes = await GetAllGameTypes();
+                model.Clubs = await GetAllClubs();
+                model.Players = await GetAllPlayers();
 
-            await context.GameResults.AddAsync(playerGame);
-
-            await context.SaveChangesAsync();
-
-            return RedirectToAction(nameof(Details), new { id = playerGame.Id });
+                return View(model);
+            }
         }
 
         [HttpGet]

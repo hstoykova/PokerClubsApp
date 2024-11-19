@@ -29,5 +29,11 @@ namespace PokerClubsApp.Data.Repository
         {
             return this.dbSet.AsQueryable();
         }
+
+        public async Task AddAsync(TType item)
+        {
+            await this.dbSet.AddAsync(item);
+            await this.dbContext.SaveChangesAsync();
+        }
     }
 }

@@ -1,4 +1,6 @@
 ﻿@using PokerClubsApp.Web.ViewModels.Game
+@using PokerClubsApp.Web.Infrastructure.Extensions
+
 @model AddGameResultsModel;
 
 @{
@@ -37,7 +39,7 @@
                 <input asp-for="@Model.Fee" class="form-control" aria-required="true" type="number" step=".01"/>
                 <span asp-validation-for="@Model.Fee" class="text-danger"></span>
             </div>
-            <div class="mb-3">
+@*             <div class="mb-3">
                 <label asp-for="@Model.FromDate" class="form-label-add-edit fw-bold">From</label>
                 <input asp-for="@Model.FromDate" class="form-control" aria-required="true" value="@(string.IsNullOrEmpty(Model.FromDate) ? today : Model.FromDate)" />
                 <span asp-validation-for="@Model.FromDate" class="text-danger"></span>
@@ -46,13 +48,20 @@
                 <label asp-for="@Model.ToDate" class="form-label-add-edit fw-bold">To</label>
                 <input asp-for="@Model.ToDate" class="form-control" aria-required="true" value="@(string.IsNullOrEmpty(Model.ToDate) ? today : Model.ToDate)" />
                 <span asp-validation-for="@Model.ToDate" class="text-danger"></span>
-            </div>
+            </div> *@
             <div class="mb-3">
                 <label asp-for="@Model.GameTypeId" class="form-label-add-edit fw-bold">Game Type</label>
                 <select asp-for="@Model.GameTypeId" class="form-control" aria-required="true" asp-items="@(new SelectList(Model.GameTypes, "Id", "Name"))">
                     <option value="">Select Game Type...</option>
                 </select>
                 <span asp-validation-for="@Model.GameTypeId" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="@Model.Week" class="form-label-add-edit fw-bold">Week</label>
+                <select asp-for="@Model.Week" class="form-control" aria-required="true" asp-items="@(Model.Weeks.ToSelectList())">
+                    <option value="">Select Week...</option>
+                </select>
+                <span asp-validation-for="@Model.Week" class="text-danger"></span>
             </div>
             <div class="mb-3">
                 <input class="btn btn-primary btn-dark-text mb-2 w-100 py-3 fw-bold rounded" type="submit" value="Save" />

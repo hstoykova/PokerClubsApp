@@ -11,5 +11,7 @@ namespace PokerClubsApp.Data.Repository.Interfaces
         Task<IEnumerable<TType>> GetAllAsync();
 
         IQueryable<TType> GetAllAttached();
+
+        Task AddAsync(TType item);
     }
 }
