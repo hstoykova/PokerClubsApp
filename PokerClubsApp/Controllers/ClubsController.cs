@@ -53,6 +53,7 @@ namespace PokerClubsApp.Controllers
             var model = await context.Clubs
                 .Where(c => c.IsDeleted == false)
                 .Where(c => c.Id == id)
+                .AsNoTracking()
                 .Select(c => new AddClubModel()
                 {
                     Name = c.Name,
@@ -71,7 +72,7 @@ namespace PokerClubsApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(AddClubModel model)
+        public async Task<IActionResult> Edit(AddClubModel model, int id)
         {
             if (!ModelState.IsValid)
             {
@@ -79,13 +80,14 @@ namespace PokerClubsApp.Controllers
                 return View(model);
             }
 
-            Club club = new Club()
-            {
-                Name = model.Name,
-                UnionId = model.UnionId
-            };
+            var club = await context.Clubs
+                .Where(c => c.Id == id)
+                .Where(c => c.IsDeleted == false)
+                .FirstOrDefaultAsync();
 
-            await context.Clubs.AddAsync(club);
+            club!.Name = model.Name;
+            club.UnionId = model.UnionId;
+
             await context.SaveChangesAsync();
 
             return RedirectToAction("Index", "Home");
