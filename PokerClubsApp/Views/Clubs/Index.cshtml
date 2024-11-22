@@ -1,0 +1,42 @@
+﻿@using PokerClubsApp.Data.Models
+@using PokerClubsApp.Web.ViewModels.Clubs
+
+@model List<Club>;
+
+@{
+    ViewBag.Title = "Clubs list";
+}
+
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+
+<div class="row">
+    <div class="col-sm-12 offset-lg-1 col-lg-10 offset-xl-2 col-xl-8" style="overflow: auto">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Club Name</th>
+                    <th scope="col">Union</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var club in Model)
+                {
+                    <tr>
+                        <td><p>@club.Name</p></td>
+                        <td><p>@club.Union.Name</p></td>
+                    </tr>
+                }
+                
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+

@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 using PokerClubsApp.Data;
 using PokerClubsApp.Data.Models;
 using PokerClubsApp.Web.ViewModels.Clubs;
+using PokerClubsApp.Web.ViewModels.GameResults;
 
 namespace PokerClubsApp.Controllers
 {
@@ -89,25 +91,16 @@ namespace PokerClubsApp.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        //[HttpGet]
-        //public async Task<IActionResult> Index(AddClubModel model)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var clubs = await context.Clubs
-        //        .Where(c => c.IsDeleted == false)
-        //        .AsNoTracking()
-        //        .ToListAsync();
-
-        //    var unions = await context.Unions
-        //        .Where(u => u.IsDeleted == false)
-        //        .AsNoTracking()
-        //        .ToListAsync();
-
-        //    return View(model);
-        //}
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var model = await context.Clubs
+                .Where(c => c.IsDeleted == false)
+                .Include(c => c.Union)
+                .AsNoTracking()           
+                .ToListAsync();
+                
+            return View(model);
+        }
     }
 }
