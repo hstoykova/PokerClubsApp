@@ -5,7 +5,7 @@ using PokerClubsApp.Data.Models;
 
 namespace PokerClubsApp.Data.Configuration
 {
-    public class UnionConfiguration : IEntityTypeConfiguration<Union>
+    public class UnionsSeed : IEntityTypeConfiguration<Union>
     {
         public void Configure(EntityTypeBuilder<Union> builder)
         {

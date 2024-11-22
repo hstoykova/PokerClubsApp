@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PokerClubsApp.Data.Configuration
 {
-    public class GameTypeConfiguration : IEntityTypeConfiguration<GameType>
+    public class GameTypesSeed : IEntityTypeConfiguration<GameType>
     {
         public void Configure(EntityTypeBuilder<GameType> builder)
         {
