@@ -23,7 +23,7 @@ namespace PokerClubsApp.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Add()
+        public async Task<IActionResult> Create()
         {
             var model = new AddGameResultsModel();
 
@@ -41,7 +41,7 @@ namespace PokerClubsApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(AddGameResultsModel model)
+        public async Task<IActionResult> Create(AddGameResultsModel model)
         {
             if (ModelState.IsValid == false)
             {
