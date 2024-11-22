@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using PokerClubsApp.Data;
 using PokerClubsApp.Data.Models;
-using PokerClubsApp.Web.ViewModels.Game;
 using PokerClubsApp.Web.ViewModels.Unions;
 
 namespace PokerClubsApp.Controllers
