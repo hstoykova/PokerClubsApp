@@ -44,7 +44,7 @@ namespace PokerClubsApp.Controllers
             await context.Clubs.AddAsync(club);
             await context.SaveChangesAsync();
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction(nameof(Details), new {id = club.Id});
         }
 
         [HttpGet]
@@ -90,7 +90,7 @@ namespace PokerClubsApp.Controllers
 
             await context.SaveChangesAsync();
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction(nameof(Details), new {id = club.Id});
         }
 
         [HttpGet]
@@ -102,6 +102,24 @@ namespace PokerClubsApp.Controllers
                 .AsNoTracking()           
                 .ToListAsync();
                 
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            var model = await context.Clubs
+                .Where(c => c.Id == id)
+                .Where(c => c.IsDeleted == false)
+                .Include(c => c.Union)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+
+            if (model is null)
+            {
+                return NotFound();
+            }
+
             return View(model);
         }
     }
