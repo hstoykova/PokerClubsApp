@@ -35,7 +35,7 @@ namespace PokerClubsApp.Controllers
             await context.Unions.AddAsync(union);
             await context.SaveChangesAsync();
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction(nameof(Details), new {id = union.Id});
         }
 
         [HttpGet]
@@ -76,7 +76,35 @@ namespace PokerClubsApp.Controllers
 
             await context.SaveChangesAsync();
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction(nameof(Details), new { id = union.Id });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var model = await context.Unions
+                .Where(u => u.IsDeleted == false)
+                .AsNoTracking()
+                .ToListAsync();
+             
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            var model = await context.Unions
+                .Where(u => u.Id == id)
+                .Where(u => u.IsDeleted == false)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+
+            if(model is null)
+            {
+                return NotFound();
+            }
+
+            return View(model);
         }
     }
 }
