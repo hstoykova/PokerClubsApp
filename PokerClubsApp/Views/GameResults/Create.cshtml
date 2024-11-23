@@ -16,11 +16,11 @@
     <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
         <form asp-action="Create" method="post">
             <div class="mb-3">
-                <label asp-for="@Model.AccountId" class="form-label-add-edit fw-bold">Nickname</label>
-                <select asp-for="@Model.AccountId" class="form-control" aria-required="true" asp-items="@(new SelectList(Model.Players, "AccountId", "Nickname"))">
+                <label asp-for="@Model.PlayerId" class="form-label-add-edit fw-bold">Nickname</label>
+                <select asp-for="@Model.PlayerId" class="form-control" aria-required="true" asp-items="@(new SelectList(Model.Players, "Id", "Nickname"))">
                     <option value="">Select Account...</option>
                 </select>
-                <span asp-validation-for="@Model.AccountId" class="text-danger"></span>
+                <span asp-validation-for="@Model.PlayerId" class="text-danger"></span>
             </div>
             <div class="mb-3">
                 <label asp-for="@Model.ClubId" class="form-label-add-edit fw-bold">Club Name</label>

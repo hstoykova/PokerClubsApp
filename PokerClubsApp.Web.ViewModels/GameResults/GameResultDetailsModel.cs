@@ -14,7 +14,7 @@ namespace PokerClubsApp.Web.ViewModels.GameResults
 
         public string UnionName { get; set; } = null!;
 
-        public int PlayerAccountId { get; set; }
+        public int PlayerId { get; set; }
 
         public string Nickname { get; set; } = null!;
 

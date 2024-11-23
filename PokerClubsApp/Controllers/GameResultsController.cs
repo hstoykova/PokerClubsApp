@@ -82,7 +82,7 @@ namespace PokerClubsApp.Controllers
                 {
                     Id = pg.Id,
                     UnionName = pg.Membership.Club.Union.Name,
-                    PlayerAccountId = pg.Membership.PlayerAccountId,
+                    PlayerId = pg.Membership.PlayerId,
                     Nickname = pg.Membership.Player.Nickname,
                     ClubName = pg.Membership.Club.Name,
                     Result = pg.Result,
@@ -189,7 +189,7 @@ namespace PokerClubsApp.Controllers
                 .FirstOrDefaultAsync();
 
             var membership = await context.Memberships
-                .Where(m => m.ClubId == model.ClubId && m.PlayerAccountId == player!.AccountId)
+                .Where(m => m.ClubId == model.ClubId && m.PlayerId == player!.Id)
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
 

@@ -30,7 +30,7 @@ namespace PokerClubsApp.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Membership>()
-                .HasIndex(m => new { m.ClubId, m.PlayerAccountId })
+                .HasIndex(m => new { m.ClubId, m.PlayerId })
                 .HasDatabaseName("IX_Memberships_Club_PlayerAccountId")
                 .IsUnique();
 

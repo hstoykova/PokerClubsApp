@@ -12,11 +12,11 @@ namespace PokerClubsApp.Data.Migrations
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_PlayersGames_Players_PlayerAccountId",
-                table: "GameResults");
+                table: "PlayersGames");
 
             migrationBuilder.DropIndex(
                 name: "IX_PlayersGames_PlayerAccountId",
-                table: "GameResults");
+                table: "PlayersGames");
 
             migrationBuilder.DropIndex(
                 name: "IX_Memberships_ClubId",
@@ -24,7 +24,7 @@ namespace PokerClubsApp.Data.Migrations
 
             migrationBuilder.DropColumn(
                 name: "PlayerAccountId",
-                table: "GameResults");
+                table: "PlayersGames");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Memberships_Club_PlayerAccountId",
@@ -42,14 +42,14 @@ namespace PokerClubsApp.Data.Migrations
 
             migrationBuilder.AddColumn<int>(
                 name: "PlayerAccountId",
-                table: "GameResults",
+                table: "PlayersGames",
                 type: "int",
                 nullable: false,
                 defaultValue: 0);
 
             migrationBuilder.CreateIndex(
                 name: "IX_PlayersGames_PlayerAccountId",
-                table: "GameResults",
+                table: "PlayersGames",
                 column: "PlayerAccountId");
 
             migrationBuilder.CreateIndex(
@@ -59,7 +59,7 @@ namespace PokerClubsApp.Data.Migrations
 
             migrationBuilder.AddForeignKey(
                 name: "FK_PlayersGames_Players_PlayerAccountId",
-                table: "GameResults",
+                table: "PlayersGames",
                 column: "PlayerAccountId",
                 principalTable: "Players",
                 principalColumn: "AccountId",

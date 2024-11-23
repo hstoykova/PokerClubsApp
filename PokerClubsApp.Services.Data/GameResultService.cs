@@ -64,7 +64,7 @@ namespace PokerClubsApp.Services.Data
             var player = await this.playerRepository
                 .GetAllAttached()
                 .Where(p => p.IsDeleted == false)
-                .Where(p => p.AccountId == model.AccountId)
+                .Where(p => p.Id == model.PlayerId)
                 .Include(p => p.Memberships)
                 .FirstOrDefaultAsync();
 
@@ -79,7 +79,7 @@ namespace PokerClubsApp.Services.Data
             var membership = await this.membershipRepository
                 .GetAllAttached()
                 .Where(m => m.IsDeleted == false)
-                .Where(m => m.ClubId == model.ClubId && m.PlayerAccountId == model.AccountId)
+                .Where(m => m.ClubId == model.ClubId && m.PlayerId == model.PlayerId)
                 .FirstOrDefaultAsync();
 
 

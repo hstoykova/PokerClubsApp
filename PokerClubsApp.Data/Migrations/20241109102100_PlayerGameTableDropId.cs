@@ -12,7 +12,7 @@ namespace PokerClubsApp.Data.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "Id",
-                table: "GameResults");
+                table: "PlayersGames");
         }
 
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace PokerClubsApp.Data.Migrations
         {
             migrationBuilder.AddColumn<int>(
                 name: "Id",
-                table: "GameResults",
+                table: "PlayersGames",
                 type: "int",
                 nullable: false,
                 defaultValue: 0);

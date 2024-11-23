@@ -13,28 +13,28 @@ namespace PokerClubsApp.Data.Migrations
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_PlayersGames_PlayedGames_GameId",
-                table: "GameResults");
+                table: "PlayersGames");
 
             migrationBuilder.DropTable(
                 name: "PlayedGames");
 
             migrationBuilder.DropPrimaryKey(
                 name: "PK_PlayersGames",
-                table: "GameResults");
+                table: "PlayersGames");
 
             migrationBuilder.RenameColumn(
                 name: "GameId",
-                table: "GameResults",
+                table: "PlayersGames",
                 newName: "GameTypeId");
 
             migrationBuilder.RenameIndex(
                 name: "IX_PlayersGames_GameId",
-                table: "GameResults",
+                table: "PlayersGames",
                 newName: "IX_PlayersGames_GameTypeId");
 
             migrationBuilder.AddColumn<int>(
                 name: "Id",
-                table: "GameResults",
+                table: "PlayersGames",
                 type: "int",
                 nullable: false,
                 defaultValue: 0)
@@ -42,31 +42,31 @@ namespace PokerClubsApp.Data.Migrations
 
             migrationBuilder.AddColumn<DateTime>(
                 name: "FromDate",
-                table: "GameResults",
+                table: "PlayersGames",
                 type: "datetime2",
                 nullable: false,
                 defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
 
             migrationBuilder.AddColumn<DateTime>(
                 name: "ToDate",
-                table: "GameResults",
+                table: "PlayersGames",
                 type: "datetime2",
                 nullable: false,
                 defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_PlayersGames",
-                table: "GameResults",
+                table: "PlayersGames",
                 column: "Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PlayersGames_PlayerAccountId",
-                table: "GameResults",
+                table: "PlayersGames",
                 column: "PlayerAccountId");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_PlayersGames_GamesTypes_GameTypeId",
-                table: "GameResults",
+                table: "PlayersGames",
                 column: "GameTypeId",
                 principalTable: "GamesTypes",
                 principalColumn: "Id",
@@ -78,41 +78,41 @@ namespace PokerClubsApp.Data.Migrations
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_PlayersGames_GamesTypes_GameTypeId",
-                table: "GameResults");
+                table: "PlayersGames");
 
             migrationBuilder.DropPrimaryKey(
                 name: "PK_PlayersGames",
-                table: "GameResults");
+                table: "PlayersGames");
 
             migrationBuilder.DropIndex(
                 name: "IX_PlayersGames_PlayerAccountId",
-                table: "GameResults");
+                table: "PlayersGames");
 
             migrationBuilder.DropColumn(
                 name: "Id",
-                table: "GameResults");
+                table: "PlayersGames");
 
             migrationBuilder.DropColumn(
                 name: "FromDate",
-                table: "GameResults");
+                table: "PlayersGames");
 
             migrationBuilder.DropColumn(
                 name: "ToDate",
-                table: "GameResults");
+                table: "PlayersGames");
 
             migrationBuilder.RenameColumn(
                 name: "GameTypeId",
-                table: "GameResults",
+                table: "PlayersGames",
                 newName: "GameId");
 
             migrationBuilder.RenameIndex(
                 name: "IX_PlayersGames_GameTypeId",
-                table: "GameResults",
+                table: "PlayersGames",
                 newName: "IX_PlayersGames_GameId");
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_PlayersGames",
-                table: "GameResults",
+                table: "PlayersGames",
                 columns: new[] { "PlayerAccountId", "GameId" });
 
             migrationBuilder.CreateTable(
@@ -142,7 +142,7 @@ namespace PokerClubsApp.Data.Migrations
 
             migrationBuilder.AddForeignKey(
                 name: "FK_PlayersGames_PlayedGames_GameId",
-                table: "GameResults",
+                table: "PlayersGames",
                 column: "GameId",
                 principalTable: "PlayedGames",
                 principalColumn: "Id",

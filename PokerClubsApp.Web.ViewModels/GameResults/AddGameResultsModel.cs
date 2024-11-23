@@ -13,7 +13,7 @@ namespace PokerClubsApp.Web.ViewModels.Game
     public class AddGameResultsModel
     {
         [Required]
-        public int AccountId { get; set; }
+        public int PlayerId { get; set; }
 
         public List<Player> Players { get; set; } = new();
 
