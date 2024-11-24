@@ -14,7 +14,7 @@ namespace PokerClubsApp
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +25,7 @@ namespace PokerClubsApp
 
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+            builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {
                 options.SignIn.RequireConfirmedAccount = false;
                 options.Password.RequireDigit = false;
@@ -44,22 +44,32 @@ namespace PokerClubsApp
             builder.Services.AddScoped<IRepository<GameResult, int>, BaseRepository<GameResult, int>>();
             builder.Services.AddScoped<IGameResultService, GameResultService>();
 
+            builder.Services.AddTransient<IRolesSeedService, RolesSeedService>();
+
             builder.Services.AddControllersWithViews();
             builder.Services.AddRazorPages();
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
+            //Seed roles and users
+            using (var scope = app.Services.CreateScope())
             {
-                app.UseMigrationsEndPoint();
+                var rolesSeeder = scope.ServiceProvider.GetRequiredService<IRolesSeedService>();
+
+                await rolesSeeder.SeedRolesAsync();
             }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
+
+                // Configure the HTTP request pipeline.
+                if (app.Environment.IsDevelopment())
+                {
+                    app.UseMigrationsEndPoint();
+                }
+                else
+                {
+                    app.UseExceptionHandler("/Home/Error");
+                    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                    app.UseHsts();
+                }
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
