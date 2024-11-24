@@ -34,6 +34,22 @@ namespace PokerClubsApp.Data
                 .HasDatabaseName("IX_Memberships_Club_PlayerAccountId")
                 .IsUnique();
 
+            modelBuilder.Entity<Player>()
+               .HasIndex(p => p.Nickname)
+               .IsUnique();
+
+            modelBuilder.Entity<Player>()
+                .HasIndex(p => p.AccountId)
+                .IsUnique();
+
+            modelBuilder.Entity<Union>()
+                .HasIndex(u => u.Name)
+                .IsUnique();
+
+            modelBuilder.Entity<Club>()
+                .HasIndex(c => c.Name)
+                .IsUnique();
+
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }
