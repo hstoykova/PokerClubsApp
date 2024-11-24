@@ -45,6 +45,7 @@ namespace PokerClubsApp
             builder.Services.AddScoped<IGameResultService, GameResultService>();
 
             builder.Services.AddTransient<IRolesSeedService, RolesSeedService>();
+            builder.Services.AddTransient<IUserSeedService, UserSeedService>();
 
             builder.Services.AddControllersWithViews();
             builder.Services.AddRazorPages();
@@ -57,19 +58,23 @@ namespace PokerClubsApp
                 var rolesSeeder = scope.ServiceProvider.GetRequiredService<IRolesSeedService>();
 
                 await rolesSeeder.SeedRolesAsync();
+
+                var adminSeeder = scope.ServiceProvider.GetRequiredService<IUserSeedService>();
+
+                await adminSeeder.SeedUserAsync();
             }
 
-                // Configure the HTTP request pipeline.
-                if (app.Environment.IsDevelopment())
-                {
-                    app.UseMigrationsEndPoint();
-                }
-                else
-                {
-                    app.UseExceptionHandler("/Home/Error");
-                    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                    app.UseHsts();
-                }
+            // Configure the HTTP request pipeline.
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseMigrationsEndPoint();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
