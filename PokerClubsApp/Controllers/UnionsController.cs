@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PokerClubsApp.Data;
 using PokerClubsApp.Data.Models;
@@ -39,6 +40,7 @@ namespace PokerClubsApp.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id)
         {
             var model = await context.Unions
@@ -60,6 +62,7 @@ namespace PokerClubsApp.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(AddUnionModel model, int id)
         {
             if (!ModelState.IsValid)

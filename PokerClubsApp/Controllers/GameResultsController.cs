@@ -1,4 +1,5 @@
 ﻿using Itenso.TimePeriod;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PokerClubsApp.Data;
@@ -97,6 +98,7 @@ namespace PokerClubsApp.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id)
         {
             var model = await context.GameResults
@@ -127,6 +129,7 @@ namespace PokerClubsApp.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(EditGameResultsModel model, int id)
         {
             if (ModelState.IsValid == false)
