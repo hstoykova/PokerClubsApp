@@ -23,6 +23,7 @@ namespace PokerClubsApp.Web.ViewModels.Game
         public List<Club> Clubs { get; set; } = new();
 
         [Required]
+        [Range(ResultMinValue, ResultsMaxValue)]
         public decimal Result { get; set; }
 
         [Required]
