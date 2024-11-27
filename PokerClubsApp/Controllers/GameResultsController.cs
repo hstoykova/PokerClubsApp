@@ -122,8 +122,17 @@ namespace PokerClubsApp.Controllers
                 return NotFound();
             }
 
+            var selectedWeek = $"{model.FromDate} - {model.ToDate}";
+
+            var week = new Week(DateTime.Now);
+            var weeks = Enumerable.Range(1, 3)
+                .Select(i => week.AddWeeks(-i))
+                .ToList();
+
             model.GameTypes = await GetAllGameTypes();
             model.Clubs = await GetAllClubs();
+            model.Weeks = weeks;
+            model.Week = selectedWeek;
 
             return View(model);
         }
@@ -140,85 +149,19 @@ namespace PokerClubsApp.Controllers
                 return View(model);
             }
 
-            DateTime fromDate;
-            if (DateTime.TryParseExact(model.FromDate, FromDateFormat, CultureInfo.CurrentCulture, DateTimeStyles.None, out fromDate) == false)
-            {
-                ModelState.AddModelError(nameof(model.FromDate), "Invalid date format");
-                model.GameTypes = await GetAllGameTypes();
-                model.Clubs = await GetAllClubs();
+            var gameResult = await gameResultsService.EditGameResultAsync(model, id);
 
-                return View(model);
-            }
+            // TODO Check if gameResult is null
+            //if (gameResult == null) 
+            //{
 
-            DateTime toDate;
-            if (DateTime.TryParseExact(model.ToDate, FromDateFormat, CultureInfo.CurrentCulture, DateTimeStyles.None, out toDate) == false)
-            {
-                ModelState.AddModelError(nameof(model.ToDate), "Invalid date format");
-                model.GameTypes = await GetAllGameTypes();
-                model.Clubs = await GetAllClubs();
+            //}
 
-                return View(model);
-            }
-
-            if (fromDate.DayOfWeek != DayOfWeek.Monday || fromDate > toDate)
-            {
-                ModelState.AddModelError(nameof(model.FromDate), "From date must be Monday and earlier than To date!");
-                model.GameTypes = await GetAllGameTypes();
-                model.Clubs = await GetAllClubs();
-
-                return View(model);
-            }
-
-            if (toDate.DayOfWeek != DayOfWeek.Sunday || toDate < fromDate)
-            {
-                ModelState.AddModelError(nameof(model.ToDate), "To date must be Sunday and later than From date!");
-                model.GameTypes = await GetAllGameTypes();
-                model.Clubs = await GetAllClubs();
-
-                return View(model);
-            }
-
-            GameResult? playerGame = await context.GameResults.FindAsync(id);
-
-            if (playerGame == null || playerGame.IsDeleted)
-            {
-                return NotFound();
-            }
-
-            var player = await context.Memberships
-                .Where(m => m.Id == playerGame.MembershipId)
-                .AsNoTracking()
-                .Select(m => m.Player)
-                .FirstOrDefaultAsync();
-
-            var membership = await context.Memberships
-                .Where(m => m.ClubId == model.ClubId && m.PlayerId == player!.Id)
-                .AsNoTracking()
-                .FirstOrDefaultAsync();
-
-            if (membership == null)
-            {
-                membership = new Membership()
-                {
-                    Player = player!,
-                    ClubId = model.ClubId
-                };
-
-                await context.Memberships.AddAsync(membership);
-            }
-
-            playerGame.Membership = membership;
-            playerGame.GameTypeId = model.GameTypeId;
-            playerGame.FromDate = fromDate;
-            playerGame.ToDate = toDate;
-            playerGame.Result = model.Result;
-            playerGame.Fee = model.Fee;
-
-            await context.SaveChangesAsync();
-
-            return RedirectToAction(nameof(Details), new { id = playerGame.Id });
+            return RedirectToAction(nameof(Details), new { id = gameResult.Id });
         }
 
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             var model = await context.GameResults.FindAsync(id);

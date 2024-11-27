@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualBasic;
+﻿using Itenso.TimePeriod;
+using Microsoft.VisualBasic;
 using PokerClubsApp.Data.Models;
 using System;
 using System.Collections.Generic;
@@ -37,5 +38,10 @@ namespace PokerClubsApp.Web.ViewModels.GameResults
         public int GameTypeId { get; set; }
 
         public List<GameType> GameTypes { get; set; } = new();
+
+        [Required]
+        public string Week { get; set; } = null!;
+
+        public List<Week> Weeks { get; set; } = new();
     }
 }

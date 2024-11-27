@@ -35,5 +35,29 @@ namespace PokerClubsApp.Data.Repository
             await this.dbSet.AddAsync(item);
             await this.dbContext.SaveChangesAsync();
         }
+
+        public async Task<TType?> GetByIdAsync(TId id)
+        {
+            TType? entity = await this.dbSet
+                .FindAsync(id);
+
+            return entity;
+        }
+
+        public async Task<bool> UpdateAsync(TType item)
+        {
+            try
+            {
+                this.dbSet.Attach(item);
+                this.dbContext.Entry(item).State = EntityState.Modified;
+                await this.dbContext.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
     }
 }

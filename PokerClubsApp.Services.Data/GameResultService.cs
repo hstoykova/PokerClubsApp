@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Itenso.TimePeriod;
 using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
+using PokerClubsApp.Web.ViewModels.GameResults;
 
 namespace PokerClubsApp.Services.Data
 {
@@ -51,30 +52,12 @@ namespace PokerClubsApp.Services.Data
                 throw new ArgumentException(paramName: nameof(model.Week), message: "Invalid date format");
             }
 
-            //if (fromDate.DayOfWeek != DayOfWeek.Monday || fromDate > toDate)
-            //{
-            //    throw new ArgumentException(paramName: nameof(model.FromDate), message: "From date must be Monday and earlier than To date!");
-            //}
-
-            //if (toDate.DayOfWeek != DayOfWeek.Sunday || toDate < fromDate)
-            //{
-            //    throw new ArgumentException(paramName: nameof(model.ToDate), message: "To date must be Sunday and later than From date!");
-            //}
-
             var player = await this.playerRepository
                 .GetAllAttached()
                 .Where(p => p.IsDeleted == false)
                 .Where(p => p.Id == model.PlayerId)
                 .Include(p => p.Memberships)
                 .FirstOrDefaultAsync();
-
-
-            // TODO If player is new - add button for adding new player
-
-            //if (player is null)
-            //{
-
-            //}
 
             var membership = await this.membershipRepository
                 .GetAllAttached()
@@ -107,6 +90,69 @@ namespace PokerClubsApp.Services.Data
             await this.gameResultRepository.AddAsync(gameResult);
 
             return gameResult.Id;
+        }
+
+        public async Task<GameResult?> EditGameResultAsync(EditGameResultsModel model, int id)
+        {
+            var dates = model.Week.Split(" - ");
+
+            var fromDateString = dates[0];
+            var toDateString = dates[1];
+
+            DateTime fromDate;
+            if (DateTime.TryParseExact(fromDateString, FromDateFormat, CultureInfo.CurrentCulture, DateTimeStyles.None, out fromDate) == false)
+            {
+                throw new ArgumentException(paramName: nameof(model.Week), message: "Invalid date format");
+            }
+
+            DateTime toDate;
+            if (DateTime.TryParseExact(toDateString, FromDateFormat, CultureInfo.CurrentCulture, DateTimeStyles.None, out toDate) == false)
+            {
+                throw new ArgumentException(paramName: nameof(model.Week), message: "Invalid date format");
+            }
+
+            GameResult? gameResult = await gameResultRepository.GetByIdAsync(id);
+
+            if (gameResult == null || gameResult.IsDeleted)
+            {
+                throw new ArgumentException("Result not found.");
+            }
+
+            var player = await membershipRepository.GetAllAttached()
+                .Where(m => m.Id == gameResult.MembershipId)
+                .AsNoTracking()
+                .Select(m => m.Player)
+                .FirstOrDefaultAsync();
+
+            var membership = await membershipRepository.GetAllAttached()
+                .Where(m => m.ClubId == model.ClubId && m.PlayerId == player!.Id)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+
+            if (membership == null)
+            {
+                membership = new Membership()
+                {
+                    Player = player!,
+                    ClubId = model.ClubId
+                };
+
+                await membershipRepository.AddAsync(membership);
+            }
+
+            gameResult.Membership = membership;
+            gameResult.GameTypeId = model.GameTypeId;
+            gameResult.FromDate = fromDate;
+            gameResult.ToDate = toDate;
+            gameResult.Result = model.Result;
+            gameResult.Fee = model.Fee;
+
+            if (await gameResultRepository.UpdateAsync(gameResult))
+            {
+                return gameResult;
+            }
+
+            return null;
         }
     }
 }
