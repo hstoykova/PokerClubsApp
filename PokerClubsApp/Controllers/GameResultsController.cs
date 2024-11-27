@@ -164,16 +164,7 @@ namespace PokerClubsApp.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
-            var model = await context.GameResults.FindAsync(id);
-
-            if (model == null)
-            {
-                return NotFound();
-            }
-
-            model.IsDeleted = true;
-
-            await context.SaveChangesAsync();
+            await gameResultsService.DeleteGameResultAsync(id);
 
             return RedirectToAction("Index", "Home");
         }

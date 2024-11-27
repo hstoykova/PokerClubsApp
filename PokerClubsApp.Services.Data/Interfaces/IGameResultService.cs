@@ -13,5 +13,7 @@ namespace PokerClubsApp.Services.Data.Interfaces
 
         Task<GameResult?> EditGameResultAsync(EditGameResultsModel model, int id);
 
+        Task<bool> DeleteGameResultAsync(int id);
+
     }
 }

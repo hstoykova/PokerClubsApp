@@ -154,5 +154,14 @@ namespace PokerClubsApp.Services.Data
 
             return null;
         }
+
+        public async Task<bool> DeleteGameResultAsync(int id)
+        {
+            var gameResult = await gameResultRepository.GetByIdAsync(id);
+
+            gameResult.IsDeleted = true;
+
+            return await gameResultRepository.UpdateAsync(gameResult);
+        }
     }
 }
