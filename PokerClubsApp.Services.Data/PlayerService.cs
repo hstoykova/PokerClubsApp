@@ -21,6 +21,5 @@ namespace PokerClubsApp.Services.Data
                 .Where(p => p.IsDeleted == false)
                 .ToListAsync();
         }
-       
     }
 }

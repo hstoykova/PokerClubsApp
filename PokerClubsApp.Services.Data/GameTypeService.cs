@@ -17,5 +17,6 @@ namespace PokerClubsApp.Services.Data
         {
             return await gameTypeRepository.GetAllAsync();
         }
+
     }
 }

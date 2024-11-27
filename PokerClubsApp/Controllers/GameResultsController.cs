@@ -16,11 +16,18 @@ namespace PokerClubsApp.Controllers
     {
         private readonly PokerClubsDbContext context;
         private readonly IGameResultService gameResultsService;
+        private readonly IPlayerService playerService;
+        private readonly IClubService clubService;
+        private readonly IGameTypeService gameTypeService;
 
-        public GameResultsController(PokerClubsDbContext _context, IGameResultService gameResultsService)
+        public GameResultsController(PokerClubsDbContext _context, IGameResultService gameResultsService, IPlayerService playerService, 
+            IClubService clubService, IGameTypeService gameTypeService)
         {
             context = _context;
             this.gameResultsService = gameResultsService;
+            this.playerService = playerService;
+            this.clubService = clubService;
+            this.gameTypeService = gameTypeService;
         }
 
         [HttpGet]
@@ -33,9 +40,9 @@ namespace PokerClubsApp.Controllers
                 .Select(i => week.AddWeeks(-i))
                 .ToList();
 
-            model.GameTypes = await GetAllGameTypes();
-            model.Clubs = await GetAllClubs();
-            model.Players = await GetAllPlayers();
+            model.GameTypes = (await gameTypeService.GetAllGameTypesAsync()).ToList();
+            model.Clubs = (await clubService.GetAllClubsAsync()).ToList();
+            model.Players = (await playerService.GetAllPlayersAsync()).ToList();
             model.Weeks = weeks;
 
             return this.View(model);
@@ -46,9 +53,9 @@ namespace PokerClubsApp.Controllers
         {
             if (ModelState.IsValid == false)
             {
-                model.GameTypes = await GetAllGameTypes();
-                model.Clubs = await GetAllClubs();
-                model.Players = await GetAllPlayers();
+                model.GameTypes = (await gameTypeService.GetAllGameTypesAsync()).ToList();
+                model.Clubs = (await clubService.GetAllClubsAsync()).ToList();
+                model.Players = (await playerService.GetAllPlayersAsync()).ToList();
 
                 return View(model);
             }
@@ -64,9 +71,9 @@ namespace PokerClubsApp.Controllers
             catch (ArgumentException e)
             {
                 ModelState.AddModelError(e.ParamName!, e.Message);
-                model.GameTypes = await GetAllGameTypes();
-                model.Clubs = await GetAllClubs();
-                model.Players = await GetAllPlayers();
+                model.GameTypes = (await gameTypeService.GetAllGameTypesAsync()).ToList();
+                model.Clubs = (await clubService.GetAllClubsAsync()).ToList();
+                model.Players = (await playerService.GetAllPlayersAsync()).ToList();
 
                 return View(model);
             }
@@ -129,8 +136,8 @@ namespace PokerClubsApp.Controllers
                 .Select(i => week.AddWeeks(-i))
                 .ToList();
 
-            model.GameTypes = await GetAllGameTypes();
-            model.Clubs = await GetAllClubs();
+            model.GameTypes = (await gameTypeService.GetAllGameTypesAsync()).ToList();
+            model.Clubs = (await clubService.GetAllClubsAsync()).ToList();
             model.Weeks = weeks;
             model.Week = selectedWeek;
 
@@ -143,8 +150,8 @@ namespace PokerClubsApp.Controllers
         {
             if (ModelState.IsValid == false)
             {
-                model.GameTypes = await GetAllGameTypes();
-                model.Clubs = await GetAllClubs();
+                model.GameTypes = (await gameTypeService.GetAllGameTypesAsync()).ToList();
+                model.Clubs = (await clubService.GetAllClubsAsync()).ToList();
 
                 return View(model);
             }
@@ -167,25 +174,6 @@ namespace PokerClubsApp.Controllers
             await gameResultsService.DeleteGameResultAsync(id);
 
             return RedirectToAction("Index", "Home");
-        }
-
-        private async Task<List<GameType>> GetAllGameTypes()
-        {
-            return await context.GamesTypes.ToListAsync();
-        }
-
-        private async Task<List<Club>> GetAllClubs()
-        {
-            return await context.Clubs
-                .Where(c => c.IsDeleted == false)
-                .ToListAsync();
-        }
-
-        private async Task<List<Player>> GetAllPlayers()
-        {
-            return await context.Players
-                .Where(p => p.IsDeleted == false)
-                .ToListAsync();
         }
     }
 }
