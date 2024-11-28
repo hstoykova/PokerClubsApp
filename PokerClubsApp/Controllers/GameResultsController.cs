@@ -31,6 +31,7 @@ namespace PokerClubsApp.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create()
         {
             var model = new CreateGameResultsModel();
@@ -49,6 +50,7 @@ namespace PokerClubsApp.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create(CreateGameResultsModel model)
         {
             if (ModelState.IsValid == false)
@@ -80,6 +82,7 @@ namespace PokerClubsApp.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Details(int id)
         {
             var model = await gameResultsService.GetGameResultsDetailsAsync(id);

@@ -23,6 +23,7 @@ namespace PokerClubsApp.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create()
         {
             var model = new CreateClubModel();
@@ -32,6 +33,7 @@ namespace PokerClubsApp.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create(CreateClubModel model)
         {
             if (!ModelState.IsValid)
@@ -84,6 +86,7 @@ namespace PokerClubsApp.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             var model = await clubService.IndexGetAllClubsAsync();
@@ -92,6 +95,7 @@ namespace PokerClubsApp.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Details(int id)
         {
             var model = await clubService.GetClubDetailsAsync(id);
