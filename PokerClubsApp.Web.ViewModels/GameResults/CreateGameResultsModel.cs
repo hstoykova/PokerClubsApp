@@ -10,7 +10,7 @@ using static PokerClubsApp.Common.EntityValidationConstants.GameResult;
 
 namespace PokerClubsApp.Web.ViewModels.Game
 {
-    public class AddGameResultsModel
+    public class CreateGameResultsModel
     {
         [Required]
         public int PlayerId { get; set; }

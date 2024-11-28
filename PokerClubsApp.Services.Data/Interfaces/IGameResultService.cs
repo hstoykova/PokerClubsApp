@@ -9,11 +9,12 @@ namespace PokerClubsApp.Services.Data.Interfaces
 {
     public interface IGameResultService
     {
-        Task<int> AddGameResultAsync(AddGameResultsModel inputModel);
+        Task<int> CreateGameResultAsync(CreateGameResultsModel inputModel);
 
         Task<GameResult?> EditGameResultAsync(EditGameResultsModel model, int id);
 
         Task<bool> DeleteGameResultAsync(int id);
 
+        Task<GameResultDetailsModel?> GetGameResultsDetailsAsync(int id);
     }
 }

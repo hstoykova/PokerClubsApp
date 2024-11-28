@@ -33,7 +33,7 @@ namespace PokerClubsApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            var model = new AddGameResultsModel();
+            var model = new CreateGameResultsModel();
 
             var week = new Week(DateTime.Now);
             var weeks = Enumerable.Range(1, 3)
@@ -49,7 +49,7 @@ namespace PokerClubsApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(AddGameResultsModel model)
+        public async Task<IActionResult> Create(CreateGameResultsModel model)
         {
             if (ModelState.IsValid == false)
             {
@@ -62,7 +62,7 @@ namespace PokerClubsApp.Controllers
 
             try
             {
-                var gameResultId = await gameResultsService.AddGameResultAsync(model);
+                var gameResultId = await gameResultsService.CreateGameResultAsync(model);
                 return RedirectToAction(nameof(Details), new
                 {
                     id = gameResultId
@@ -82,24 +82,7 @@ namespace PokerClubsApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            var model = await context.GameResults
-                .Where(pg => pg.Id == id)
-                .Where(pg => pg.IsDeleted == false)
-                .AsNoTracking()
-                .Select(pg => new GameResultDetailsModel()
-                {
-                    Id = pg.Id,
-                    UnionName = pg.Membership.Club.Union.Name,
-                    PlayerId = pg.Membership.PlayerId,
-                    Nickname = pg.Membership.Player.Nickname,
-                    ClubName = pg.Membership.Club.Name,
-                    Result = pg.Result,
-                    Fee = pg.Fee,
-                    FromDate = pg.FromDate,
-                    ToDate = pg.ToDate,
-                    GameType = pg.GameType.Name
-                })
-                .FirstOrDefaultAsync();
+            var model = await gameResultsService.GetGameResultsDetailsAsync(id);
 
             return View(model);
         }

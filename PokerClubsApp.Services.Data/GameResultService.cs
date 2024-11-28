@@ -33,7 +33,7 @@ namespace PokerClubsApp.Services.Data
             this.gameResultRepository = gameResultRepository;
         }
 
-        public async Task<int> AddGameResultAsync(AddGameResultsModel model)
+        public async Task<int> CreateGameResultAsync(CreateGameResultsModel model)
         {
             var dates = model.Week.Split(" - ");
 
@@ -162,6 +162,30 @@ namespace PokerClubsApp.Services.Data
             gameResult.IsDeleted = true;
 
             return await gameResultRepository.UpdateAsync(gameResult);
+        }
+
+        public async Task<GameResultDetailsModel?> GetGameResultsDetailsAsync(int id)
+        {
+            var gameResult = await gameResultRepository.GetAllAttached()
+                .Where(pg => pg.Id == id)
+                .Where(pg => pg.IsDeleted == false)
+                .AsNoTracking()
+                .Select(pg => new GameResultDetailsModel()
+                {
+                    Id = pg.Id,
+                    UnionName = pg.Membership.Club.Union.Name,
+                    PlayerId = pg.Membership.PlayerId,
+                    Nickname = pg.Membership.Player.Nickname,
+                    ClubName = pg.Membership.Club.Name,
+                    Result = pg.Result,
+                    Fee = pg.Fee,
+                    FromDate = pg.FromDate,
+                    ToDate = pg.ToDate,
+                    GameType = pg.GameType.Name
+                })
+                .FirstOrDefaultAsync();
+
+            return gameResult;
         }
     }
 }
