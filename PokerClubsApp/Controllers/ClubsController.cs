@@ -25,14 +25,14 @@ namespace PokerClubsApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            var model = new AddClubModel();
+            var model = new CreateClubModel();
             model.Unions = await context.Unions.ToListAsync();
 
             return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(AddClubModel model)
+        public async Task<IActionResult> Create(CreateClubModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -49,22 +49,14 @@ namespace PokerClubsApp.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id)
         {
-            var model = await context.Clubs
-                .Where(c => c.IsDeleted == false)
-                .Where(c => c.Id == id)
-                .AsNoTracking()
-                .Select(c => new AddClubModel()
-                {
-                    Name = c.Name,
-                    UnionId = c.UnionId
-                })
-                .FirstOrDefaultAsync();
+            var model = await clubService.GetClubForEditAsync(id);
 
             if (model == null)
             {
                 return NotFound();
             }
 
+            // TODO: Take Unions from UnionsService !!!
             model.Unions = await context.Unions.ToListAsync();
 
             return View(model);
@@ -72,7 +64,7 @@ namespace PokerClubsApp.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Edit(AddClubModel model, int id)
+        public async Task<IActionResult> Edit(CreateClubModel model, int id)
         {
             if (!ModelState.IsValid)
             {
@@ -80,15 +72,12 @@ namespace PokerClubsApp.Controllers
                 return View(model);
             }
 
-            var club = await context.Clubs
-                .Where(c => c.Id == id)
-                .Where(c => c.IsDeleted == false)
-                .FirstOrDefaultAsync();
+            var club = await clubService.EditClubAsync(model, id);
 
-            club!.Name = model.Name;
-            club.UnionId = model.UnionId;
-
-            await context.SaveChangesAsync();
+            if (club == null)
+            {
+                return NotFound();
+            }
 
             return RedirectToAction(nameof(Details), new {id = club.Id});
         }

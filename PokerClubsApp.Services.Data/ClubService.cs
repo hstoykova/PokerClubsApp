@@ -14,7 +14,7 @@ namespace PokerClubsApp.Services.Data
             this.clubRepository = clubRepository;
         }
 
-        public async Task<Club> CreateClubAsync(AddClubModel model)
+        public async Task<Club> CreateClubAsync(CreateClubModel model)
         {
             Club club = new Club() 
             {
@@ -26,6 +26,43 @@ namespace PokerClubsApp.Services.Data
 
             return club;
         }
+
+        public async Task<CreateClubModel?> GetClubForEditAsync(int id)
+        {
+            var club = await clubRepository.GetByIdAsync(id);
+
+            if (club?.IsDeleted ?? false)
+            {
+                return null;
+            }
+
+            var model = new CreateClubModel() 
+            {
+                Name = club!.Name,
+                UnionId = club.UnionId
+            };
+
+            return model;
+        }
+
+        public async Task<Club?> EditClubAsync(CreateClubModel model, int id)
+        {
+            var club = await clubRepository.GetByIdAsync(id);
+
+            if (club?.IsDeleted ?? false)
+            {
+                return null;
+            }
+
+            club!.Name = model.Name;
+            club.UnionId = model.UnionId;
+
+            await clubRepository.UpdateAsync(club);
+
+            return club;
+        }
+
+        
 
         public async Task<IEnumerable<Club>> GetAllClubsAsync()
         {

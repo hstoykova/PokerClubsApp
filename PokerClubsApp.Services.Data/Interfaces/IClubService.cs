@@ -1,5 +1,6 @@
 ﻿using PokerClubsApp.Data.Models;
 using PokerClubsApp.Web.ViewModels.Clubs;
+using PokerClubsApp.Web.ViewModels.GameResults;
 
 namespace PokerClubsApp.Services.Data.Interfaces
 {
@@ -7,6 +8,10 @@ namespace PokerClubsApp.Services.Data.Interfaces
     {
         Task<IEnumerable<Club>> GetAllClubsAsync();
 
-        Task<Club> CreateClubAsync(AddClubModel model);
+        Task<Club> CreateClubAsync(CreateClubModel model);
+
+        Task<CreateClubModel?> GetClubForEditAsync(int id);
+
+        Task<Club?> EditClubAsync(CreateClubModel model, int id);
     }
 }

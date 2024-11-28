@@ -4,7 +4,7 @@ using static PokerClubsApp.Common.EntityValidationConstants.Club;
 
 namespace PokerClubsApp.Web.ViewModels.Clubs
 {
-    public class AddClubModel
+    public class CreateClubModel
     {
         [Required]
         [MinLength(ClubNameMinLength)]
