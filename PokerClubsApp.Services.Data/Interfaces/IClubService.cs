@@ -13,5 +13,9 @@ namespace PokerClubsApp.Services.Data.Interfaces
         Task<CreateClubModel?> GetClubForEditAsync(int id);
 
         Task<Club?> EditClubAsync(CreateClubModel model, int id);
+
+        Task<IEnumerable<Club>> IndexGetAllClubsAsync();
+
+        Task<Club?> GetClubDetailsAsync(int id);
     }
 }

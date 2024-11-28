@@ -68,6 +68,7 @@ namespace PokerClubsApp.Controllers
         {
             if (!ModelState.IsValid)
             {
+                // TODO: Take Unions from UnionsService !!!
                 model.Unions = await context.Unions.ToListAsync();
                 return View(model);
             }
@@ -85,11 +86,7 @@ namespace PokerClubsApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var model = await context.Clubs
-                .Where(c => c.IsDeleted == false)
-                .Include(c => c.Union)
-                .AsNoTracking()           
-                .ToListAsync();
+            var model = await clubService.IndexGetAllClubsAsync();
                 
             return View(model);
         }
@@ -97,12 +94,7 @@ namespace PokerClubsApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            var model = await context.Clubs
-                .Where(c => c.Id == id)
-                .Where(c => c.IsDeleted == false)
-                .Include(c => c.Union)
-                .AsNoTracking()
-                .FirstOrDefaultAsync();
+            var model = await clubService.GetClubDetailsAsync(id);
 
             if (model is null)
             {

@@ -71,5 +71,24 @@ namespace PokerClubsApp.Services.Data
                 .Where(c => c.IsDeleted == false)
                 .ToListAsync();
         }
+
+        public async Task<IEnumerable<Club>> IndexGetAllClubsAsync()
+        {
+            return await clubRepository.GetAllAttached()
+                .Where(c => c.IsDeleted == false)
+                .Include(c => c.Union)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        public async Task<Club?> GetClubDetailsAsync(int id)
+        {
+            return await clubRepository.GetAllAttached()
+                .Where(c => c.Id == id)
+                .Where(c => c.IsDeleted == false)
+                .Include(c => c.Union)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+        }
     }
 }
