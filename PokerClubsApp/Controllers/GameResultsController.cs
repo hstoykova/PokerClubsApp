@@ -91,21 +91,7 @@ namespace PokerClubsApp.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id)
         {
-            var model = await context.GameResults
-                .Where(pg => pg.Id == id)
-                .Where(pg => pg.IsDeleted == false)
-                .AsNoTracking()
-                .Select(pg => new EditGameResultsModel()
-                {
-                    Nickname = pg.Membership.Player.Nickname,
-                    ClubId = pg.Membership.ClubId,
-                    Result = pg.Result,
-                    Fee = pg.Fee,
-                    FromDate = pg.FromDate.ToString(FromDateFormat),
-                    ToDate = pg.ToDate.ToString(ToDateFormat),
-                    GameTypeId = pg.GameTypeId
-                })
-                .FirstOrDefaultAsync();
+            var model = await gameResultsService.GetGameResultForEditAsync(id);
 
             if (model == null)
             {

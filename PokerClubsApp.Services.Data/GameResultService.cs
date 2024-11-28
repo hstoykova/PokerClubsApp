@@ -92,6 +92,28 @@ namespace PokerClubsApp.Services.Data
             return gameResult.Id;
         }
 
+        public async Task<EditGameResultsModel?> GetGameResultForEditAsync(int id)
+        {
+            var gameResult = await gameResultRepository
+                .GetAllAttached()
+                .Where(pg => pg.Id == id)
+                .Where(pg => pg.IsDeleted == false)
+                .AsNoTracking()
+                .Select(pg => new EditGameResultsModel()
+                {
+                    Nickname = pg.Membership.Player.Nickname,
+                    ClubId = pg.Membership.ClubId,
+                    Result = pg.Result,
+                    Fee = pg.Fee,
+                    FromDate = pg.FromDate.ToString(FromDateFormat),
+                    ToDate = pg.ToDate.ToString(ToDateFormat),
+                    GameTypeId = pg.GameTypeId
+                })
+                .FirstOrDefaultAsync();
+
+            return gameResult;
+        }
+
         public async Task<GameResult?> EditGameResultAsync(EditGameResultsModel model, int id)
         {
             var dates = model.Week.Split(" - ");
@@ -187,5 +209,7 @@ namespace PokerClubsApp.Services.Data
 
             return gameResult;
         }
+
+        
     }
 }

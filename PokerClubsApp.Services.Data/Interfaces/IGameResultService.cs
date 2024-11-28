@@ -11,6 +11,8 @@ namespace PokerClubsApp.Services.Data.Interfaces
     {
         Task<int> CreateGameResultAsync(CreateGameResultsModel inputModel);
 
+        Task<EditGameResultsModel?> GetGameResultForEditAsync(int id); 
+
         Task<GameResult?> EditGameResultAsync(EditGameResultsModel model, int id);
 
         Task<bool> DeleteGameResultAsync(int id);
