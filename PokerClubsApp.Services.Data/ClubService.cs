@@ -2,6 +2,7 @@
 using PokerClubsApp.Data.Models;
 using PokerClubsApp.Data.Repository.Interfaces;
 using PokerClubsApp.Services.Data.Interfaces;
+using PokerClubsApp.Web.ViewModels.Clubs;
 
 namespace PokerClubsApp.Services.Data
 {
@@ -11,6 +12,19 @@ namespace PokerClubsApp.Services.Data
         public ClubService(IRepository<Club, int> clubRepository)
         {
             this.clubRepository = clubRepository;
+        }
+
+        public async Task<Club> CreateClubAsync(AddClubModel model)
+        {
+            Club club = new Club() 
+            {
+                Name = model.Name,
+                UnionId = model.UnionId
+            };
+
+            await clubRepository.AddAsync(club);
+
+            return club;
         }
 
         public async Task<IEnumerable<Club>> GetAllClubsAsync()

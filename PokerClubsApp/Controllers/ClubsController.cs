@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 using PokerClubsApp.Data;
 using PokerClubsApp.Data.Models;
+using PokerClubsApp.Services.Data;
+using PokerClubsApp.Services.Data.Interfaces;
 using PokerClubsApp.Web.ViewModels.Clubs;
 using PokerClubsApp.Web.ViewModels.GameResults;
 
@@ -12,10 +14,12 @@ namespace PokerClubsApp.Controllers
     public class ClubsController : Controller
     {
         private readonly PokerClubsDbContext context;
+        private readonly IClubService clubService;
 
-        public ClubsController(PokerClubsDbContext context)
+        public ClubsController(PokerClubsDbContext context, IClubService clubService)
         {
             this.context = context;
+            this.clubService = clubService;
         }
 
         [HttpGet]
@@ -36,14 +40,7 @@ namespace PokerClubsApp.Controllers
                 return View(model);
             }
 
-            Club club = new Club() 
-            { 
-                Name = model.Name,
-                UnionId = model.UnionId
-            };
-            
-            await context.Clubs.AddAsync(club);
-            await context.SaveChangesAsync();
+            var club = await clubService.CreateClubAsync(model);
 
             return RedirectToAction(nameof(Details), new {id = club.Id});
         }
