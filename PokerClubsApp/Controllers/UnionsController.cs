@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PokerClubsApp.Data;
 using PokerClubsApp.Data.Models;
+using PokerClubsApp.Services.Data.Interfaces;
 using PokerClubsApp.Web.ViewModels.Unions;
 
 namespace PokerClubsApp.Controllers
@@ -10,31 +11,33 @@ namespace PokerClubsApp.Controllers
     public class UnionsController : Controller
     {
         private readonly PokerClubsDbContext context;
+        private readonly IUnionService unionService;
 
-        public UnionsController(PokerClubsDbContext context)
+        public UnionsController(PokerClubsDbContext context, IUnionService unionService)
         {
             this.context = context;
+            this.unionService = unionService;
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
-            var model = new AddUnionModel();
+            var model = new CreateUnionModel();
             
             return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(AddUnionModel model)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Create(CreateUnionModel model)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            Union union = new Union() { Name = model.Name };
-            await context.Unions.AddAsync(union);
-            await context.SaveChangesAsync();
+            var union = await unionService.CreateUnionAsync(model);
 
             return RedirectToAction(nameof(Details), new {id = union.Id});
         }
@@ -47,7 +50,7 @@ namespace PokerClubsApp.Controllers
                 .Where(u => u.Id == id)
                 .Where(u => u.IsDeleted == false)
                 .AsNoTracking()
-                .Select(u => new AddUnionModel()
+                .Select(u => new CreateUnionModel()
                 {
                     Name = u.Name
                 })
@@ -63,7 +66,7 @@ namespace PokerClubsApp.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Edit(AddUnionModel model, int id)
+        public async Task<IActionResult> Edit(CreateUnionModel model, int id)
         {
             if (!ModelState.IsValid)
             {
@@ -83,6 +86,7 @@ namespace PokerClubsApp.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             var model = await context.Unions
@@ -94,6 +98,7 @@ namespace PokerClubsApp.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Details(int id)
         {
             var model = await context.Unions

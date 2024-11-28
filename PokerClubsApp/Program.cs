@@ -42,11 +42,13 @@ namespace PokerClubsApp
             builder.Services.AddScoped<IRepository<GameType, int>, BaseRepository<GameType, int>>();
             builder.Services.AddScoped<IRepository<Membership, int>, BaseRepository<Membership, int>>();
             builder.Services.AddScoped<IRepository<GameResult, int>, BaseRepository<GameResult, int>>();
+            builder.Services.AddScoped<IRepository<Union, int>, BaseRepository<Union, int>>();
 
             builder.Services.AddScoped<IGameResultService, GameResultService>();
             builder.Services.AddScoped<IGameTypeService, GameTypeService>();
             builder.Services.AddScoped<IPlayerService, PlayerService>();
             builder.Services.AddScoped<IClubService, ClubService>();
+            builder.Services.AddScoped<IUnionService, UnionService>();
 
             builder.Services.AddTransient<IRolesSeedService, RolesSeedService>();
             builder.Services.AddTransient<IUserSeedService, UserSeedService>();

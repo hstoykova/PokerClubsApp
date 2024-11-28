@@ -8,7 +8,7 @@ using static PokerClubsApp.Common.EntityValidationConstants.Union;
 
 namespace PokerClubsApp.Web.ViewModels.Unions
 {
-    public class AddUnionModel
+    public class CreateUnionModel
     {
         [Required]
         [MinLength(UnionNameMinLength)]
