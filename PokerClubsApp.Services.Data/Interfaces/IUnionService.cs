@@ -16,5 +16,7 @@ namespace PokerClubsApp.Services.Data.Interfaces
         Task<CreateUnionModel?> GetUnionForEditAsync(int id);
 
         Task<Union?> EditUnionAsync(CreateUnionModel model, int id);
+
+        Task<IEnumerable<Union>> IndexGetAllUnionsAsync();
     }
 }

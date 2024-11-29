@@ -79,10 +79,7 @@ namespace PokerClubsApp.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
-            var model = await context.Unions
-                .Where(u => u.IsDeleted == false)
-                .AsNoTracking()
-                .ToListAsync();
+            var model = await unionService.IndexGetAllUnionsAsync();
              
             return View(model);
         }

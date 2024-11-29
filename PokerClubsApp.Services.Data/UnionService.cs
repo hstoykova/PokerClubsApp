@@ -63,5 +63,14 @@ namespace PokerClubsApp.Services.Data
             return union;
         }
 
+        public async Task<IEnumerable<Union>> IndexGetAllUnionsAsync()
+        {
+            var model = await unionRepository.GetAllAttached()
+                .Where(u => u.IsDeleted == false)
+                .AsNoTracking()
+                .ToListAsync();
+
+            return model;
+        }
     }
 }
