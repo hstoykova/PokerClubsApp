@@ -31,7 +31,7 @@ namespace PokerClubsApp.Services.Data
         {
             var club = await clubRepository.GetByIdAsync(id);
 
-            if (club?.IsDeleted ?? false)
+            if (club?.IsDeleted ?? true)
             {
                 return null;
             }
@@ -49,7 +49,7 @@ namespace PokerClubsApp.Services.Data
         {
             var club = await clubRepository.GetByIdAsync(id);
 
-            if (club?.IsDeleted ?? false)
+            if (club?.IsDeleted ?? true)
             {
                 return null;
             }

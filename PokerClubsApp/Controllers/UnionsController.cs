@@ -46,17 +46,9 @@ namespace PokerClubsApp.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id)
         {
-            var model = await context.Unions
-                .Where(u => u.Id == id)
-                .Where(u => u.IsDeleted == false)
-                .AsNoTracking()
-                .Select(u => new CreateUnionModel()
-                {
-                    Name = u.Name
-                })
-                .FirstOrDefaultAsync();
+            var model = await unionService.GetUnionForEditAsync(id);
 
-            if(model is null)
+            if(model == null)
             {
                 return NotFound();
             }
@@ -73,14 +65,12 @@ namespace PokerClubsApp.Controllers
                 return View(model);
             }
 
-            var union = await context.Unions
-                .Where(u => u.Id == id)
-                .Where(u => u.IsDeleted == false)
-                .FirstOrDefaultAsync();
+            var union = await unionService.EditUnionAsync(model, id);
 
-            union!.Name = model.Name;
-
-            await context.SaveChangesAsync();
+            if (union == null)
+            {
+                return NotFound();
+            }
 
             return RedirectToAction(nameof(Details), new { id = union.Id });
         }
