@@ -14,16 +14,14 @@ namespace PokerClubsApp.Controllers
 {
     public class GameResultsController : Controller
     {
-        private readonly PokerClubsDbContext context;
         private readonly IGameResultService gameResultsService;
         private readonly IPlayerService playerService;
         private readonly IClubService clubService;
         private readonly IGameTypeService gameTypeService;
 
-        public GameResultsController(PokerClubsDbContext _context, IGameResultService gameResultsService, IPlayerService playerService, 
+        public GameResultsController(IGameResultService gameResultsService, IPlayerService playerService, 
             IClubService clubService, IGameTypeService gameTypeService)
         {
-            context = _context;
             this.gameResultsService = gameResultsService;
             this.playerService = playerService;
             this.clubService = clubService;

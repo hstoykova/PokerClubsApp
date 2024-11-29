@@ -13,13 +13,13 @@ namespace PokerClubsApp.Controllers
 {
     public class ClubsController : Controller
     {
-        private readonly PokerClubsDbContext context;
         private readonly IClubService clubService;
+        private readonly IUnionService unionService;
 
-        public ClubsController(PokerClubsDbContext context, IClubService clubService)
+        public ClubsController(IClubService clubService, IUnionService unionService)
         {
-            this.context = context;
             this.clubService = clubService;
+            this.unionService = unionService;
         }
 
         [HttpGet]
@@ -27,7 +27,7 @@ namespace PokerClubsApp.Controllers
         public async Task<IActionResult> Create()
         {
             var model = new CreateClubModel();
-            model.Unions = await context.Unions.ToListAsync();
+            model.Unions = (await unionService.IndexGetAllUnionsAsync()).ToList();
 
             return View(model);
         }
@@ -38,7 +38,7 @@ namespace PokerClubsApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                model.Unions = await context.Unions.ToListAsync();
+                model.Unions = (await unionService.IndexGetAllUnionsAsync()).ToList();
                 return View(model);
             }
 
@@ -58,8 +58,7 @@ namespace PokerClubsApp.Controllers
                 return NotFound();
             }
 
-            // TODO: Take Unions from UnionsService !!!
-            model.Unions = await context.Unions.ToListAsync();
+            model.Unions = (await unionService.IndexGetAllUnionsAsync()).ToList();
 
             return View(model);
         }
@@ -70,8 +69,7 @@ namespace PokerClubsApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                // TODO: Take Unions from UnionsService !!!
-                model.Unions = await context.Unions.ToListAsync();
+                model.Unions = (await unionService.IndexGetAllUnionsAsync()).ToList();
                 return View(model);
             }
 

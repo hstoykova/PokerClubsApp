@@ -10,12 +10,10 @@ namespace PokerClubsApp.Controllers
 {
     public class UnionsController : Controller
     {
-        private readonly PokerClubsDbContext context;
         private readonly IUnionService unionService;
 
-        public UnionsController(PokerClubsDbContext context, IUnionService unionService)
+        public UnionsController(IUnionService unionService)
         {
-            this.context = context;
             this.unionService = unionService;
         }
 
