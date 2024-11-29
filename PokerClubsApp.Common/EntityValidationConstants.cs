@@ -33,5 +33,14 @@
             public const double ResultMinValue = 0.01d;
             public const double ResultsMaxValue = 200000;
         }
+
+        public static class Invitation
+        {
+            public const int NicknameMinLength = 2;
+            public const int NicknameMaxLength = 50;
+            public const int AccountIdMinLength = 2;
+            public const int AccountIdMaxLength = 20;
+
+        }
     }
 }

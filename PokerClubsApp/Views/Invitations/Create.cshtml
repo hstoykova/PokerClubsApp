@@ -1,0 +1,47 @@
+﻿@using PokerClubsApp.Web.ViewModels.Invitations
+@model CreateInvitationModel
+
+@{
+    ViewBag.Title = "Create Invitation";
+}
+
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+
+<div class="row">
+    <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+        <form asp-action="Create" method="post">
+            <div class="mb-3">
+                <label asp-for="@Model.Email" class="form-label-add-edit fw-bold">Email</label>
+                <input asp-for="@Model.Email" class="form-control" aria-required="true"/>
+                <span asp-validation-for="@Model.Email" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="@Model.Nickname" class="form-label-add-edit fw-bold">Nickname</label>
+                <input asp-for="@Model.Nickname" class="form-control" aria-required="true" />
+                <span asp-validation-for="@Model.Nickname" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="@Model.AccountId" class="form-label-add-edit fw-bold">Account Id</label>
+                <input asp-for="@Model.AccountId" class="form-control" aria-required="true" />
+                <span asp-validation-for="@Model.AccountId" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="@Model.ClubId" class="form-label-add-edit fw-bold">Club Name</label>
+                <select asp-for="@Model.ClubId" class="form-control" aria-required="true" asp-items="@(new SelectList(Model.Clubs, "Id", "Name"))">
+                    <option value="">Select Club...</option>
+                </select>
+                <span asp-validation-for="@Model.ClubId" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <input class="btn btn-primary btn-dark-text mb-2 w-100 py-3 fw-bold rounded" type="submit" value="Save" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

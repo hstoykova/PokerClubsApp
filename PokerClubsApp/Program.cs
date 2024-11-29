@@ -49,6 +49,7 @@ namespace PokerClubsApp
             builder.Services.AddScoped<IPlayerService, PlayerService>();
             builder.Services.AddScoped<IClubService, ClubService>();
             builder.Services.AddScoped<IUnionService, UnionService>();
+            builder.Services.AddScoped<IInvitationService, InvitationService>();
 
             builder.Services.AddTransient<IRolesSeedService, RolesSeedService>();
             builder.Services.AddTransient<IUserSeedService, UserSeedService>();
