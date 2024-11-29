@@ -88,11 +88,7 @@ namespace PokerClubsApp.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Details(int id)
         {
-            var model = await context.Unions
-                .Where(u => u.Id == id)
-                .Where(u => u.IsDeleted == false)
-                .AsNoTracking()
-                .FirstOrDefaultAsync();
+            var model = await unionService.GetUnionDetailsAsync(id);
 
             if(model is null)
             {
