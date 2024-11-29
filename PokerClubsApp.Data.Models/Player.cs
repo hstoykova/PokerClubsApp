@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using static PokerClubsApp.Common.EntityValidationConstants.Player;
 
@@ -17,6 +18,13 @@ namespace PokerClubsApp.Data.Models
 
         public virtual List<Membership> Memberships { get; set; } = new();
 
+        [Required]
+        public string UserId { get; set; } = null!;
+
+        [ForeignKey(nameof(UserId))]
+        public virtual IdentityUser User { get; set; } = null!;
+
+        [Required]
         public bool IsDeleted { get; set; }
     }
 }

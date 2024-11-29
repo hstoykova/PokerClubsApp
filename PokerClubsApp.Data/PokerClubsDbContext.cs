@@ -42,6 +42,12 @@ namespace PokerClubsApp.Data
                 .HasIndex(p => p.AccountId)
                 .IsUnique();
 
+            modelBuilder.Entity<Player>()
+                .HasOne(p => p.User)
+                .WithMany()
+                .HasForeignKey(p => p.UserId)
+                .IsRequired();
+
             modelBuilder.Entity<Union>()
                 .HasIndex(u => u.Name)
                 .IsUnique();
