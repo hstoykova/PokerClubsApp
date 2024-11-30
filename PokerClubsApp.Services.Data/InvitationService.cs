@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using PokerClubsApp.Data.Models;
 using PokerClubsApp.Data.Repository.Interfaces;
 using PokerClubsApp.Services.Data.Interfaces;
@@ -16,12 +20,17 @@ namespace PokerClubsApp.Services.Data
         private readonly IRepository<Player, int> playerRepository;
         private readonly IRepository<Membership, int> membershipRepository;
         private readonly UserManager<IdentityUser> userManager;
+        private readonly IEmailSender emailSender;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
-        public InvitationService(IRepository<Player, int> playerRepository, IRepository<Membership, int> membershipRepository, UserManager<IdentityUser> userManager)
+        public InvitationService(IRepository<Player, int> playerRepository, IRepository<Membership, int> membershipRepository, 
+            UserManager<IdentityUser> userManager, IEmailSender emailSender, IHttpContextAccessor httpContextAccessor)
         {
             this.playerRepository = playerRepository;
             this.membershipRepository = membershipRepository;
             this.userManager = userManager;
+            this.emailSender = emailSender;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<bool> CreateInvitationAsync(CreateInvitationModel model)
@@ -57,6 +66,25 @@ namespace PokerClubsApp.Services.Data
             };
 
             await membershipRepository.AddAsync(membership);
+
+            var token = await userManager.GenerateUserTokenAsync(user, TokenOptions.DefaultProvider, "InviteUser");
+            var encodedToken = Uri.EscapeDataString(token);
+            var host = httpContextAccessor.HttpContext?.Request.Host;
+
+            if (host == null)
+            {
+                throw new ArgumentException("Host is missing");
+            }
+
+            var url = $"{host}/Players/FinishRegistration?userId={user.Id}&token={token}";
+
+            // For debugging purposes
+            Console.WriteLine(url);
+
+            var subject = "You are invited to PokerClubsApp";
+            var message = $"Please click <a href=\"{url}\"> here</a> to finish your registration";
+
+            await emailSender.SendEmailAsync(user.Email, subject, message);
 
             return true;
         }

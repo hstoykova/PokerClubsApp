@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using PokerClubsApp.Data;
 using PokerClubsApp.Data.Models;
@@ -32,7 +33,11 @@ namespace PokerClubsApp
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = false;
             })
+                .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<PokerClubsDbContext>();
+
+            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddSingleton<IEmailSender, NoOpEmailSender>();
 
             //builder.Services.RegisterRepositories(typeof(ApplicationUser).Assembly);
             //builder.Services.RegisterUserDefinedServices(typeof(IGameResultService).Assembly);
@@ -56,6 +61,11 @@ namespace PokerClubsApp
 
             builder.Services.AddControllersWithViews();
             builder.Services.AddRazorPages();
+
+            if (builder.Environment.IsDevelopment())
+            {
+                builder.Logging.AddConsole(options => options.LogToStandardErrorThreshold = LogLevel.Debug);
+            }
 
             var app = builder.Build();
 
