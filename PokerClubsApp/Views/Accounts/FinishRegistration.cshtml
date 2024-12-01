@@ -1,0 +1,39 @@
+﻿@using PokerClubsApp.Web.ViewModels.Accounts
+
+@model SetPasswordModel;
+
+@{
+    ViewBag.Title = "Finish Registration";
+}
+
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+
+<div class="row">
+    <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+        <form asp-action="FinishRegistration" method="post">
+            <input asp-for="@Model.Token" class="form-control" type="hidden" />
+            <input asp-for="@Model.UserId" class="form-control" type="hidden" />
+            <div class="mb-3">
+                <label asp-for="@Model.Password" class="form-label-add-edit fw-bold">Password</label>
+                <input asp-for="@Model.Password" class="form-control" aria-required="true" />
+                <span asp-validation-for="@Model.Password" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="@Model.ConfirmPassword" class="form-label-add-edit fw-bold">Confirm Password</label>
+                <input asp-for="@Model.ConfirmPassword" class="form-control" aria-required="true" />
+                <span asp-validation-for="@Model.ConfirmPassword" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <input class="btn btn-primary btn-dark-text mb-2 w-100 py-3 fw-bold rounded" type="submit" value="Save" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
