@@ -9,6 +9,8 @@ namespace PokerClubsApp.Services.Data.Interfaces
 {
     public interface IInvitationService
     {
-        Task<bool> CreateInvitationAsync(CreateInvitationModel model);
+        Task<bool> CreatePlayerInvitationAsync(PlayerInvitationModel model);
+
+        Task<bool> CreateAdminInvitationAsync(AdminInvitationModel model);
     }
 }

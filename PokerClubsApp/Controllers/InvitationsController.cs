@@ -20,9 +20,9 @@ namespace PokerClubsApp.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> Player()
         {
-            var model = new CreateInvitationModel();
+            var model = new PlayerInvitationModel();
 
             model.Clubs = (await clubService.GetAllClubsAsync()).ToList();
 
@@ -30,7 +30,8 @@ namespace PokerClubsApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateInvitationModel model)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Player(PlayerInvitationModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -40,7 +41,7 @@ namespace PokerClubsApp.Controllers
 
             try
             {
-                var invitation = await invitationService.CreateInvitationAsync(model);
+                var invitation = await invitationService.CreatePlayerInvitationAsync(model);
                 // TODO Redirect to new page
                 return RedirectToAction("Index", "Home");
             }
@@ -48,6 +49,39 @@ namespace PokerClubsApp.Controllers
             {
                 ModelState.AddModelError(string.Empty, e.Message);
                 model.Clubs = (await clubService.GetAllClubsAsync()).ToList();
+
+                return View(model);
+            }
+        }
+
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public IActionResult Admin()
+        {
+            var model = new AdminInvitationModel();
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Admin(AdminInvitationModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            try
+            {
+                var invitation = await invitationService.CreateAdminInvitationAsync(model);
+                // TODO Redirect to new page
+                return RedirectToAction("Index", "Home");
+            }
+            catch (ArgumentException e)
+            {
+                ModelState.AddModelError(string.Empty, e.Message);
 
                 return View(model);
             }

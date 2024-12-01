@@ -33,7 +33,7 @@ namespace PokerClubsApp.Services.Data
             this.httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<bool> CreateInvitationAsync(CreateInvitationModel model)
+        public async Task<bool> CreatePlayerInvitationAsync(PlayerInvitationModel model)
         {
             var existingUser = await userManager.FindByEmailAsync(model.Email);
 
@@ -49,6 +49,13 @@ namespace PokerClubsApp.Services.Data
             };
 
             await userManager.CreateAsync(user);
+
+            var grantRole = await userManager.AddToRoleAsync(user, "Player");
+
+            if (!grantRole.Succeeded)
+            {
+                throw new ApplicationException("Failed to add role to user");
+            }
 
             var player = new Player()
             {
@@ -67,7 +74,53 @@ namespace PokerClubsApp.Services.Data
 
             await membershipRepository.AddAsync(membership);
 
-            var token = await userManager.GenerateUserTokenAsync(user, TokenOptions.DefaultProvider, "InviteUser");
+            string url = await GenerateUrl(user);
+
+            var subject = "You are invited to PokerClubsApp";
+            var message = $"Please click <a href=\"{url}\"> here</a> to finish your registration";
+
+            await emailSender.SendEmailAsync(user.Email, subject, message);
+
+            return true;
+        }
+
+        public async Task<bool> CreateAdminInvitationAsync(AdminInvitationModel model)
+        {
+            var existingUser = await userManager.FindByEmailAsync(model.Email);
+
+            if (existingUser != null)
+            {
+                throw new ArgumentException("User already invited");
+            }
+
+            var user = new IdentityUser()
+            {
+                Email = model.Email,
+                UserName = model.Email
+            };
+
+            await userManager.CreateAsync(user);
+
+            var grantRole = await userManager.AddToRoleAsync(user, "Admin");
+
+            if (!grantRole.Succeeded)
+            {
+                throw new ApplicationException("Failed to add role to user");
+            }
+
+            string url = await GenerateUrl(user);
+
+            var subject = "You are invited to PokerClubsApp";
+            var message = $"Please click <a href=\"{url}\"> here</a> to finish your registration";
+
+            await emailSender.SendEmailAsync(user.Email, subject, message);
+
+            return true;
+        }
+
+        private async Task<string> GenerateUrl(IdentityUser user)
+        {
+            var token = await userManager.GeneratePasswordResetTokenAsync(user);
             var encodedToken = Uri.EscapeDataString(token);
             var host = httpContextAccessor.HttpContext?.Request.Host;
 
@@ -76,17 +129,11 @@ namespace PokerClubsApp.Services.Data
                 throw new ArgumentException("Host is missing");
             }
 
-            var url = $"{host}/Players/FinishRegistration?userId={user.Id}&token={token}";
+            var url = $"{host}/accounts/finishregistration?userId={user.Id}&token={encodedToken}";
 
             // For debugging purposes
             Console.WriteLine(url);
-
-            var subject = "You are invited to PokerClubsApp";
-            var message = $"Please click <a href=\"{url}\"> here</a> to finish your registration";
-
-            await emailSender.SendEmailAsync(user.Email, subject, message);
-
-            return true;
+            return url;
         }
     }
 }

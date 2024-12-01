@@ -9,7 +9,7 @@ using static PokerClubsApp.Common.EntityValidationConstants.Invitation;
 
 namespace PokerClubsApp.Web.ViewModels.Invitations
 {
-    public class CreateInvitationModel
+    public class PlayerInvitationModel
     {
         [Required]
         [EmailAddress]

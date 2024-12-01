@@ -1,8 +1,8 @@
 ﻿@using PokerClubsApp.Web.ViewModels.Invitations
-@model CreateInvitationModel
+@model PlayerInvitationModel
 
 @{
-    ViewBag.Title = "Create Invitation";
+    ViewBag.Title = "Invite player";
 }
 
 
@@ -11,7 +11,7 @@
 
 <div class="row">
     <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
-        <form asp-action="Create" method="post">
+        <form asp-action="Player" method="post">
             <div class="mb-3">
                 <label asp-for="@Model.Email" class="form-label-add-edit fw-bold">Email</label>
                 <input asp-for="@Model.Email" class="form-control" aria-required="true"/>
