@@ -186,13 +186,13 @@ namespace PokerClubsApp.Services.Data
             return await gameResultRepository.UpdateAsync(gameResult);
         }
 
-        public async Task<GameResultDetailsModel?> GetGameResultsDetailsAsync(int id)
+        public async Task<DetailsGameResultModel?> GetGameResultsDetailsAsync(int id)
         {
             var gameResult = await gameResultRepository.GetAllAttached()
                 .Where(pg => pg.Id == id)
                 .Where(pg => pg.IsDeleted == false)
                 .AsNoTracking()
-                .Select(pg => new GameResultDetailsModel()
+                .Select(pg => new DetailsGameResultModel()
                 {
                     Id = pg.Id,
                     UnionName = pg.Membership.Club.Union.Name,
@@ -210,6 +210,58 @@ namespace PokerClubsApp.Services.Data
             return gameResult;
         }
 
-        
+		public async Task<IndexGameResultsModel> IndexGetAllGameResultsAsync(Week? week, int? clubId)
+		{
+            var gameResultsQuery = gameResultRepository.GetAllAttached()
+                .Where(pg => pg.IsDeleted == false);
+
+            if (week != null)
+            {
+                gameResultsQuery = gameResultsQuery
+                    .Where(gr => gr.FromDate.Equals(week.FirstDayOfWeek));
+            }
+
+            if (clubId != null)
+            {
+                gameResultsQuery = gameResultsQuery
+                    .Where(gr => gr.Membership.ClubId == clubId);
+            }
+
+            var gameResults = await gameResultsQuery
+                .AsNoTracking()
+                .Select(pg => new DetailsGameResultModel()
+                {
+                    Id = pg.Id,
+                    UnionName = pg.Membership.Club.Union.Name,
+                    PlayerId = pg.Membership.PlayerId,
+                    Nickname = pg.Membership.Player.Nickname,
+                    ClubName = pg.Membership.Club.Name,
+                    Result = pg.Result,
+                    Fee = pg.Fee,
+                    FromDate = pg.FromDate,
+                    ToDate = pg.ToDate,
+                    GameType = pg.GameType.Name
+                })
+                .ToListAsync();
+
+            var weeks = gameResultRepository.GetAllAttached()
+                .AsNoTracking()
+                .Select(gr => new Week(gr.FromDate))
+                .Distinct();
+
+            var clubs = await clubRepository.GetAllAttached()
+                .Where(c => c.IsDeleted == false)
+                .AsNoTracking()
+                .ToListAsync();
+
+            var model = new IndexGameResultsModel()
+            {
+                Weeks = weeks,
+                Clubs = clubs,
+                GameResults = gameResults
+            };
+
+            return model;
+        }
     }
 }

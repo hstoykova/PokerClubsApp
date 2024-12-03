@@ -1,5 +1,6 @@
 ﻿
 
+using Itenso.TimePeriod;
 using Microsoft.AspNetCore.Mvc;
 using PokerClubsApp.Data.Models;
 using PokerClubsApp.Web.ViewModels.Game;
@@ -17,6 +18,8 @@ namespace PokerClubsApp.Services.Data.Interfaces
 
         Task<bool> DeleteGameResultAsync(int id);
 
-        Task<GameResultDetailsModel?> GetGameResultsDetailsAsync(int id);
-    }
+        Task<DetailsGameResultModel?> GetGameResultsDetailsAsync(int id);
+
+		Task<IndexGameResultsModel> IndexGetAllGameResultsAsync(Week? week, int? clubId);
+	}
 }

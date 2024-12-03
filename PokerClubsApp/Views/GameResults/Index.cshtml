@@ -1,0 +1,75 @@
+﻿@using PokerClubsApp.Web.Infrastructure.Extensions
+@using PokerClubsApp.Web.ViewModels.GameResults
+@using static PokerClubsApp.Common.EntityValidationConstants.GameResult
+@model IndexGameResultsModel;
+
+
+@{
+    ViewBag.Title = "Game Results";
+}
+
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+
+<div class="row">
+    <div class="col-sm-12 offset-lg-1 col-lg-10 offset-xl-2 col-xl-8" style="overflow: auto">
+        <form asp-action="Index" method="get">
+            <div class="mb-3">
+                <label asp-for="@Model.Week" class="form-label-add-edit fw-bold">Week</label>
+                <select asp-for="@Model.Week" class="form-control" aria-required="true" asp-items="@(Model.Weeks.ToSelectList())">
+                    <option value="">Select Week...</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label asp-for="@Model.ClubId" class="form-label-add-edit fw-bold">Club</label>
+                <select asp-for="@Model.ClubId" class="form-control" aria-required="true" asp-items="@(new SelectList(Model.Clubs, "Id", "Name"))">
+                    <option value="">Select Club...</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <input class="btn btn-primary btn-dark-text mb-2 w-100 py-3 fw-bold rounded" type="submit" value="Search" />
+            </div>
+            <div class="mb-3">
+                <a class="btn btn-warning btn-dark-text mb-2 w-100 py-3 fw-bold rounded" asp-controller="GameResults" asp-action="Index">Clear</a>
+            </div>
+        </form>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Union</th>
+                    <th scope="col">Club</th>
+                    <th scope="col">Player Id</th>
+                    <th scope="col">Nickname</th>
+                    <th scope="col">Result</th>
+                    <th scope="col">Fee</th>
+                    <th scope="col">From</th>
+                    <th scope="col">To</th>
+                    <th scope="col">Game type</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var result in Model.GameResults)
+                {
+                    <tr>
+                        <td><p>@result.UnionName</p></td>
+                        <td><p>@result.ClubName</p></td>
+                        <td><p>@result.PlayerId</p></td>
+                        <td><p>@result.Nickname</p></td>
+                        <td><p>@result.Result</p></td>
+                        <td><p>@result.Fee</p></td>
+                        <td><p>@result.FromDate.ToString(FromDateFormat)</p></td>
+                        <td><p>@result.ToDate.ToString(ToDateFormat)</p></td>
+                        <td><p>@result.GameType</p></td>
+                        <td>
+                            <a asp-controller="GameResults" asp-action="Edit" asp-route-id="@result.Id" class="btn btn-primary d-flex justify-content-center align-items-center flex-fill mx-1">Edit</a>
+                            <a asp-controller="GameResults" asp-action="Delete" asp-route-id="@result.Id" class="btn btn-danger d-flex justify-content-center align-items-center flex-fill mx-1" onclick="return confirm('Are you sure you want to delete this result?');">Delete</a>
+
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

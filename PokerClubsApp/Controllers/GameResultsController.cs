@@ -145,5 +145,23 @@ namespace PokerClubsApp.Controllers
 
             return RedirectToAction("Index", "Home");
         }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Index(string? Week, int? ClubId)
+        {
+            Week? parsedWeek = null;
+
+            if (Week != null)
+            {
+                var fromDate = Week.Split(" - ").FirstOrDefault();
+                DateTime date = DateTime.ParseExact(fromDate, FromDateFormat, CultureInfo.CurrentCulture, DateTimeStyles.None);
+                parsedWeek = new Week(date);
+            }
+
+            var model = await gameResultsService.IndexGetAllGameResultsAsync(parsedWeek, ClubId);
+
+            return View(model);
+        }
     }
 }

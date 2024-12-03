@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PokerClubsApp.Web.ViewModels.GameResults
 {
-    public class GameResultDetailsModel
+    public class DetailsGameResultModel
     {
         public int Id { get; set; }
 
