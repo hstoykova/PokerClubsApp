@@ -20,5 +20,7 @@ namespace PokerClubsApp.Data.Models
         public virtual Club Club { get; set; } = null!;
 
         public bool IsDeleted { get; set; }
+
+        public virtual IEnumerable<GameResult> GameResults { get; set; } = new List<GameResult>();
     }
 }

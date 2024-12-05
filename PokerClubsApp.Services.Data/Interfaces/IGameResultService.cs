@@ -1,6 +1,7 @@
 ﻿
 
 using Itenso.TimePeriod;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PokerClubsApp.Data.Models;
 using PokerClubsApp.Web.ViewModels.Game;
@@ -21,5 +22,7 @@ namespace PokerClubsApp.Services.Data.Interfaces
         Task<DetailsGameResultModel?> GetGameResultsDetailsAsync(int id);
 
 		Task<IndexGameResultsModel> IndexGetAllGameResultsAsync(Week? week, int? clubId);
+
+		Task<IndexGameResultsModel> IndexGetAllGameResultsAsync(string user, Week? week, int? clubId);
 	}
 }

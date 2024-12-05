@@ -12,156 +12,166 @@ using static PokerClubsApp.Common.EntityValidationConstants.GameResult;
 
 namespace PokerClubsApp.Controllers
 {
-    public class GameResultsController : Controller
-    {
-        private readonly IGameResultService gameResultsService;
-        private readonly IPlayerService playerService;
-        private readonly IClubService clubService;
-        private readonly IGameTypeService gameTypeService;
+	public class GameResultsController : Controller
+	{
+		private readonly IGameResultService gameResultsService;
+		private readonly IPlayerService playerService;
+		private readonly IClubService clubService;
+		private readonly IGameTypeService gameTypeService;
 
-        public GameResultsController(IGameResultService gameResultsService, IPlayerService playerService, 
-            IClubService clubService, IGameTypeService gameTypeService)
-        {
-            this.gameResultsService = gameResultsService;
-            this.playerService = playerService;
-            this.clubService = clubService;
-            this.gameTypeService = gameTypeService;
-        }
+		public GameResultsController(IGameResultService gameResultsService, IPlayerService playerService,
+			IClubService clubService, IGameTypeService gameTypeService)
+		{
+			this.gameResultsService = gameResultsService;
+			this.playerService = playerService;
+			this.clubService = clubService;
+			this.gameTypeService = gameTypeService;
+		}
 
-        [HttpGet]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Create()
-        {
-            var model = new CreateGameResultsModel();
+		[HttpGet]
+		[Authorize(Roles = "Admin")]
+		public async Task<IActionResult> Create()
+		{
+			var model = new CreateGameResultsModel();
 
-            var week = new Week(DateTime.Now);
-            var weeks = Enumerable.Range(1, 3)
-                .Select(i => week.AddWeeks(-i))
-                .ToList();
+			var week = new Week(DateTime.Now);
+			var weeks = Enumerable.Range(1, 3)
+				.Select(i => week.AddWeeks(-i))
+				.ToList();
 
-            model.GameTypes = (await gameTypeService.GetAllGameTypesAsync()).ToList();
-            model.Clubs = (await clubService.GetAllClubsAsync()).ToList();
-            model.Players = (await playerService.GetAllPlayersAsync()).ToList();
-            model.Weeks = weeks;
+			model.GameTypes = (await gameTypeService.GetAllGameTypesAsync()).ToList();
+			model.Clubs = (await clubService.GetAllClubsAsync()).ToList();
+			model.Players = (await playerService.GetAllPlayersAsync()).ToList();
+			model.Weeks = weeks;
 
-            return this.View(model);
-        }
+			return this.View(model);
+		}
 
-        [HttpPost]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Create(CreateGameResultsModel model)
-        {
-            if (ModelState.IsValid == false)
-            {
-                model.GameTypes = (await gameTypeService.GetAllGameTypesAsync()).ToList();
-                model.Clubs = (await clubService.GetAllClubsAsync()).ToList();
-                model.Players = (await playerService.GetAllPlayersAsync()).ToList();
+		[HttpPost]
+		[Authorize(Roles = "Admin")]
+		public async Task<IActionResult> Create(CreateGameResultsModel model)
+		{
+			if (ModelState.IsValid == false)
+			{
+				model.GameTypes = (await gameTypeService.GetAllGameTypesAsync()).ToList();
+				model.Clubs = (await clubService.GetAllClubsAsync()).ToList();
+				model.Players = (await playerService.GetAllPlayersAsync()).ToList();
 
-                return View(model);
-            }
+				return View(model);
+			}
 
-            try
-            {
-                var gameResultId = await gameResultsService.CreateGameResultAsync(model);
-                return RedirectToAction(nameof(Details), new
-                {
-                    id = gameResultId
-                });
-            }
-            catch (ArgumentException e)
-            {
-                ModelState.AddModelError(e.ParamName!, e.Message);
-                model.GameTypes = (await gameTypeService.GetAllGameTypesAsync()).ToList();
-                model.Clubs = (await clubService.GetAllClubsAsync()).ToList();
-                model.Players = (await playerService.GetAllPlayersAsync()).ToList();
+			try
+			{
+				var gameResultId = await gameResultsService.CreateGameResultAsync(model);
+				return RedirectToAction(nameof(Details), new
+				{
+					id = gameResultId
+				});
+			}
+			catch (ArgumentException e)
+			{
+				ModelState.AddModelError(e.ParamName!, e.Message);
+				model.GameTypes = (await gameTypeService.GetAllGameTypesAsync()).ToList();
+				model.Clubs = (await clubService.GetAllClubsAsync()).ToList();
+				model.Players = (await playerService.GetAllPlayersAsync()).ToList();
 
-                return View(model);
-            }
-        }
+				return View(model);
+			}
+		}
 
-        [HttpGet]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Details(int id)
-        {
-            var model = await gameResultsService.GetGameResultsDetailsAsync(id);
+		[HttpGet]
+		[Authorize(Roles = "Admin")]
+		public async Task<IActionResult> Details(int id)
+		{
+			var model = await gameResultsService.GetGameResultsDetailsAsync(id);
 
-            return View(model);
-        }
+			return View(model);
+		}
 
-        [HttpGet]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Edit(int id)
-        {
-            var model = await gameResultsService.GetGameResultForEditAsync(id);
+		[HttpGet]
+		[Authorize(Roles = "Admin")]
+		public async Task<IActionResult> Edit(int id)
+		{
+			var model = await gameResultsService.GetGameResultForEditAsync(id);
 
-            if (model == null)
-            {
-                return NotFound();
-            }
+			if (model == null)
+			{
+				return NotFound();
+			}
 
-            var selectedWeek = $"{model.FromDate} - {model.ToDate}";
+			var selectedWeek = $"{model.FromDate} - {model.ToDate}";
 
-            var week = new Week(DateTime.Now);
-            var weeks = Enumerable.Range(1, 3)
-                .Select(i => week.AddWeeks(-i))
-                .ToList();
+			var week = new Week(DateTime.Now);
+			var weeks = Enumerable.Range(1, 3)
+				.Select(i => week.AddWeeks(-i))
+				.ToList();
 
-            model.GameTypes = (await gameTypeService.GetAllGameTypesAsync()).ToList();
-            model.Clubs = (await clubService.GetAllClubsAsync()).ToList();
-            model.Weeks = weeks;
-            model.Week = selectedWeek;
+			model.GameTypes = (await gameTypeService.GetAllGameTypesAsync()).ToList();
+			model.Clubs = (await clubService.GetAllClubsAsync()).ToList();
+			model.Weeks = weeks;
+			model.Week = selectedWeek;
 
-            return View(model);
-        }
+			return View(model);
+		}
 
-        [HttpPost]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Edit(EditGameResultsModel model, int id)
-        {
-            if (ModelState.IsValid == false)
-            {
-                model.GameTypes = (await gameTypeService.GetAllGameTypesAsync()).ToList();
-                model.Clubs = (await clubService.GetAllClubsAsync()).ToList();
+		[HttpPost]
+		[Authorize(Roles = "Admin")]
+		public async Task<IActionResult> Edit(EditGameResultsModel model, int id)
+		{
+			if (ModelState.IsValid == false)
+			{
+				model.GameTypes = (await gameTypeService.GetAllGameTypesAsync()).ToList();
+				model.Clubs = (await clubService.GetAllClubsAsync()).ToList();
 
-                return View(model);
-            }
+				return View(model);
+			}
 
-            var gameResult = await gameResultsService.EditGameResultAsync(model, id);
+			var gameResult = await gameResultsService.EditGameResultAsync(model, id);
 
-            // TODO Check if gameResult is null
-            //if (gameResult == null) 
-            //{
+			// TODO Check if gameResult is null
+			//if (gameResult == null) 
+			//{
 
-            //}
+			//}
 
-            return RedirectToAction(nameof(Details), new { id = gameResult.Id });
-        }
+			return RedirectToAction(nameof(Details), new { id = gameResult.Id });
+		}
 
-        [HttpGet]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            await gameResultsService.DeleteGameResultAsync(id);
+		[HttpGet]
+		[Authorize(Roles = "Admin")]
+		public async Task<IActionResult> Delete(int id)
+		{
+			await gameResultsService.DeleteGameResultAsync(id);
 
-            return RedirectToAction("Index", "Home");
-        }
+			return RedirectToAction("Index", "Home");
+		}
 
-        [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> Index(string? Week, int? ClubId)
-        {
-            Week? parsedWeek = null;
+		[HttpGet]
+		[Authorize]
+		public async Task<IActionResult> Index(string? Week, int? ClubId)
+		{
+			Week? parsedWeek = null;
 
-            if (Week != null)
-            {
-                var fromDate = Week.Split(" - ").FirstOrDefault();
-                DateTime date = DateTime.ParseExact(fromDate, FromDateFormat, CultureInfo.CurrentCulture, DateTimeStyles.None);
-                parsedWeek = new Week(date);
-            }
+			if (Week != null)
+			{
+				var fromDate = Week.Split(" - ").FirstOrDefault();
+				DateTime date = DateTime.ParseExact(fromDate, FromDateFormat, CultureInfo.CurrentCulture, DateTimeStyles.None);
+				parsedWeek = new Week(date);
+			}
 
-            var model = await gameResultsService.IndexGetAllGameResultsAsync(parsedWeek, ClubId);
+			if (User.IsInRole("Player"))
+			{
+				var model = await gameResultsService.IndexGetAllGameResultsAsync(User.Identity!.Name!, parsedWeek, ClubId);
 
-            return View(model);
-        }
-    }
+				return View(model);
+			}
+			else
+			{
+				var model = await gameResultsService.IndexGetAllGameResultsAsync(parsedWeek, ClubId);
+
+				return View(model);
+			}
+
+		}
+	}
 }

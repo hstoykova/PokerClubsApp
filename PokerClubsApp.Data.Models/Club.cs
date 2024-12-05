@@ -21,5 +21,7 @@ namespace PokerClubsApp.Data.Models
         public virtual Union Union { get; set; } = null!;
 
         public bool IsDeleted { get; set; }
+
+        public virtual IEnumerable<Membership> Memberships { get; set; } = new List<Membership>();
     }
 }
