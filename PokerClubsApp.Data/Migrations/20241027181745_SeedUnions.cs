@@ -167,15 +167,15 @@ namespace PokerClubsApp.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            //migrationBuilder.InsertData(
-            //    table: "Unions",
-            //    columns: new[] { "Id", "Name" },
-            //    values: new object[,]
-            //    {
-            //        { 1, "Orange union" },
-            //        { 2, "Sunshine union" },
-            //        { 3, "ComeToWin" }
-            //    });
+            migrationBuilder.InsertData(
+                table: "Unions",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Orange union" },
+                    { 2, "Sunshine union" },
+                    { 3, "ComeToWin" }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -253,20 +253,20 @@ namespace PokerClubsApp.Data.Migrations
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
-            //migrationBuilder.DeleteData(
-            //    table: "Unions",
-            //    keyColumn: "Id",
-            //    keyValue: 1);
+            migrationBuilder.DeleteData(
+                table: "Unions",
+                keyColumn: "Id",
+                keyValue: 1);
 
-            //migrationBuilder.DeleteData(
-            //    table: "Unions",
-            //    keyColumn: "Id",
-            //    keyValue: 2);
+            migrationBuilder.DeleteData(
+                table: "Unions",
+                keyColumn: "Id",
+                keyValue: 2);
 
-            //migrationBuilder.DeleteData(
-            //    table: "Unions",
-            //    keyColumn: "Id",
-            //    keyValue: 3);
+            migrationBuilder.DeleteData(
+                table: "Unions",
+                keyColumn: "Id",
+                keyValue: 3);
 
             migrationBuilder.RenameColumn(
                 name: "PlayerAccountId",
