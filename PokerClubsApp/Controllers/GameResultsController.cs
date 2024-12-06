@@ -85,6 +85,11 @@ namespace PokerClubsApp.Controllers
 		{
 			var model = await gameResultsService.GetGameResultsDetailsAsync(id);
 
+			if (model == null)
+			{
+				return NotFound();
+			}
+
 			return View(model);
 		}
 
