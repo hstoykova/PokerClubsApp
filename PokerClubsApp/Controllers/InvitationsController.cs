@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
-using PokerClubsApp.Services.Data;
+using PokerClubsApp.Common;
 using PokerClubsApp.Services.Data.Interfaces;
 using PokerClubsApp.Web.ViewModels.Invitations;
 
@@ -41,13 +40,13 @@ namespace PokerClubsApp.Controllers
 
             try
             {
-                var invitation = await invitationService.CreatePlayerInvitationAsync(model);
-                // TODO Redirect to new page
+                await invitationService.CreatePlayerInvitationAsync(model);
+       
                 return RedirectToAction("Index", "Home");
             }
-            catch (ArgumentException e)
+            catch (ValidationException e)
             {
-                ModelState.AddModelError(string.Empty, e.Message);
+                ModelState.AddModelError(e.Field, e.Message);
                 model.Clubs = (await clubService.GetAllClubsAsync()).ToList();
 
                 return View(model);
@@ -75,13 +74,13 @@ namespace PokerClubsApp.Controllers
 
             try
             {
-                var invitation = await invitationService.CreateAdminInvitationAsync(model);
-                // TODO Redirect to new page
+                await invitationService.CreateAdminInvitationAsync(model);
+                
                 return RedirectToAction("Index", "Home");
             }
-            catch (ArgumentException e)
+            catch (ValidationException e)
             {
-                ModelState.AddModelError(string.Empty, e.Message);
+                ModelState.AddModelError(e.Field, e.Message);
 
                 return View(model);
             }

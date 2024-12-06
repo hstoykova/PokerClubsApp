@@ -46,7 +46,7 @@ namespace PokerClubsApp.Controllers
         {
             var model = await unionService.GetUnionForEditAsync(id);
 
-            if(model == null)
+            if (model == null)
             {
                 return NotFound();
             }

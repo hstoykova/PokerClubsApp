@@ -38,14 +38,14 @@ namespace PokerClubsApp.Services.Data
 
             if (!result.Succeeded)
             {
-                throw new ApplicationException("Failed to create admin user!");
+                throw new ArgumentException("Failed to create admin user!");
             }
 
             var grantRole = await userManager.AddToRoleAsync(admin, "Admin");
 
             if (!grantRole.Succeeded)
             {
-                throw new ApplicationException("Failed to add role to admin!");
+                throw new ArgumentException("Failed to add role to admin!");
             }
         }
     }

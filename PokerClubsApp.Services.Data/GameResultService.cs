@@ -10,6 +10,7 @@ using Itenso.TimePeriod;
 using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
 using PokerClubsApp.Web.ViewModels.GameResults;
 using Microsoft.AspNetCore.Identity;
+using PokerClubsApp.Common;
 
 namespace PokerClubsApp.Services.Data
 {
@@ -44,13 +45,13 @@ namespace PokerClubsApp.Services.Data
 			DateTime fromDate;
 			if (DateTime.TryParseExact(fromDateString, FromDateFormat, CultureInfo.CurrentCulture, DateTimeStyles.None, out fromDate) == false)
 			{
-				throw new ArgumentException(paramName: nameof(model.Week), message: "Invalid date format");
+				throw new ValidationException("Invalid date format", nameof(model.Week));
 			}
 
 			DateTime toDate;
 			if (DateTime.TryParseExact(toDateString, FromDateFormat, CultureInfo.CurrentCulture, DateTimeStyles.None, out toDate) == false)
 			{
-				throw new ArgumentException(paramName: nameof(model.Week), message: "Invalid date format");
+				throw new ValidationException("Invalid date format", nameof(model.Week));
 			}
 
 			var player = await this.playerRepository
@@ -125,20 +126,20 @@ namespace PokerClubsApp.Services.Data
 			DateTime fromDate;
 			if (DateTime.TryParseExact(fromDateString, FromDateFormat, CultureInfo.CurrentCulture, DateTimeStyles.None, out fromDate) == false)
 			{
-				throw new ArgumentException(paramName: nameof(model.Week), message: "Invalid date format");
+				throw new ValidationException("Invalid date format", nameof(model.Week));
 			}
 
 			DateTime toDate;
 			if (DateTime.TryParseExact(toDateString, FromDateFormat, CultureInfo.CurrentCulture, DateTimeStyles.None, out toDate) == false)
 			{
-				throw new ArgumentException(paramName: nameof(model.Week), message: "Invalid date format");
+				throw new ValidationException("Invalid date format", nameof(model.Week));
 			}
 
 			GameResult? gameResult = await gameResultRepository.GetByIdAsync(id);
 
 			if (gameResult == null || gameResult.IsDeleted)
 			{
-				throw new ArgumentException("Result not found.");
+				return null;
 			}
 
 			var player = await membershipRepository.GetAllAttached()
@@ -310,11 +311,6 @@ namespace PokerClubsApp.Services.Data
 				.Where(c => c.Memberships.Any(m => m.Player.User.UserName == user))
 				.AsNoTracking()
 				.ToListAsync();
-
-			foreach (var club in clubs)
-			{
-				Console.WriteLine(club.Name);
-			}
 
 			var model = new IndexGameResultsModel()
 			{

@@ -1,17 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using PokerClubsApp.Data.Models;
 using PokerClubsApp.Data.Repository.Interfaces;
 using PokerClubsApp.Services.Data.Interfaces;
 using PokerClubsApp.Web.ViewModels.Invitations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using PokerClubsApp.Common;
 
 namespace PokerClubsApp.Services.Data
 {
@@ -33,13 +27,13 @@ namespace PokerClubsApp.Services.Data
             this.httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<bool> CreatePlayerInvitationAsync(PlayerInvitationModel model)
+        public async Task CreatePlayerInvitationAsync(PlayerInvitationModel model)
         {
             var existingUser = await userManager.FindByEmailAsync(model.Email);
 
             if (existingUser != null)
             {
-                throw new ArgumentException("User already invited");
+                throw new ValidationException("User already invited", nameof(model.Email));
             }
 
             var user = new IdentityUser()
@@ -54,7 +48,7 @@ namespace PokerClubsApp.Services.Data
 
             if (!grantRole.Succeeded)
             {
-                throw new ApplicationException("Failed to add role to user");
+                throw new ArgumentException("Failed to add role to user");
             }
 
             var player = new Player()
@@ -80,17 +74,15 @@ namespace PokerClubsApp.Services.Data
             var message = $"Please click <a href=\"{url}\"> here</a> to finish your registration";
 
             await emailSender.SendEmailAsync(user.Email, subject, message);
-
-            return true;
         }
 
-        public async Task<bool> CreateAdminInvitationAsync(AdminInvitationModel model)
+        public async Task CreateAdminInvitationAsync(AdminInvitationModel model)
         {
             var existingUser = await userManager.FindByEmailAsync(model.Email);
 
             if (existingUser != null)
             {
-                throw new ArgumentException("User already invited");
+                throw new ValidationException("User already invited", nameof(model.Email));
             }
 
             var user = new IdentityUser()
@@ -105,7 +97,7 @@ namespace PokerClubsApp.Services.Data
 
             if (!grantRole.Succeeded)
             {
-                throw new ApplicationException("Failed to add role to user");
+                throw new ArgumentException("Failed to add role to user");
             }
 
             string url = await GenerateUrl(user);
@@ -114,8 +106,6 @@ namespace PokerClubsApp.Services.Data
             var message = $"Please click <a href=\"{url}\"> here</a> to finish your registration";
 
             await emailSender.SendEmailAsync(user.Email, subject, message);
-
-            return true;
         }
 
         private async Task<string> GenerateUrl(IdentityUser user)

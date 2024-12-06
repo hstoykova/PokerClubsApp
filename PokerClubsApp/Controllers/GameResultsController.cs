@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PokerClubsApp.Common;
 using PokerClubsApp.Data;
 using PokerClubsApp.Data.Models;
 using PokerClubsApp.Services.Data.Interfaces;
@@ -63,14 +64,15 @@ namespace PokerClubsApp.Controllers
 			try
 			{
 				var gameResultId = await gameResultsService.CreateGameResultAsync(model);
+
 				return RedirectToAction(nameof(Details), new
 				{
 					id = gameResultId
 				});
 			}
-			catch (ArgumentException e)
+			catch (ValidationException e)
 			{
-				ModelState.AddModelError(e.ParamName!, e.Message);
+				ModelState.AddModelError(e.Field, e.Message);
 				model.GameTypes = (await gameTypeService.GetAllGameTypesAsync()).ToList();
 				model.Clubs = (await clubService.GetAllClubsAsync()).ToList();
 				model.Players = (await playerService.GetAllPlayersAsync()).ToList();
@@ -131,15 +133,25 @@ namespace PokerClubsApp.Controllers
 				return View(model);
 			}
 
-			var gameResult = await gameResultsService.EditGameResultAsync(model, id);
+			try
+			{
+				var gameResult = await gameResultsService.EditGameResultAsync(model, id);
 
-			// TODO Check if gameResult is null
-			//if (gameResult == null) 
-			//{
+				if (gameResult == null)
+				{
+					return NotFound();
+				}
+				return RedirectToAction(nameof(Details), new { id = gameResult.Id });
+			}
+			catch (ValidationException e)
+			{
+				ModelState.AddModelError(e.Field, e.Message);
 
-			//}
+				model.GameTypes = (await gameTypeService.GetAllGameTypesAsync()).ToList();
+				model.Clubs = (await clubService.GetAllClubsAsync()).ToList();
 
-			return RedirectToAction(nameof(Details), new { id = gameResult.Id });
+				return View(model);
+			}
 		}
 
 		[HttpGet]
