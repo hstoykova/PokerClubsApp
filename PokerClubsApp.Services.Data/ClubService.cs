@@ -62,8 +62,6 @@ namespace PokerClubsApp.Services.Data
             return club;
         }
 
-        
-
         public async Task<IEnumerable<Club>> GetAllClubsAsync()
         {
             return await clubRepository

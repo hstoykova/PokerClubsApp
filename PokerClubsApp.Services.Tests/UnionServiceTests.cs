@@ -9,7 +9,7 @@ using PokerClubsApp.Web.ViewModels.Unions;
 namespace PokerClubsApp.Services.Tests
 {
     [TestFixture]
-    public class Tests
+    public class UnionServiceTests
     {
         private IList<Union> unionsData = new List<Union>()
         {
