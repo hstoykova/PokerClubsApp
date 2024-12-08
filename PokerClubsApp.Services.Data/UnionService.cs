@@ -57,10 +57,13 @@ namespace PokerClubsApp.Services.Data
             }
 
             union!.Name = model.Name;
+            
+            if (await unionRepository.UpdateAsync(union))
+            {
+                return union;
+            }
 
-            await unionRepository.UpdateAsync(union);
-
-            return union;
+            return null;
         }
 
         public async Task<IEnumerable<Union>> IndexGetAllUnionsAsync()
