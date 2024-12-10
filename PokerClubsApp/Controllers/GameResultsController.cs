@@ -165,7 +165,7 @@ namespace PokerClubsApp.Controllers
 
 		[HttpGet]
 		[Authorize]
-		public async Task<IActionResult> Index(string? Week, int? ClubId)
+		public async Task<IActionResult> Index(string? Week, int? ClubId, int PageNumber = 1, int PageSize = 5)
 		{
 			Week? parsedWeek = null;
 
@@ -176,19 +176,22 @@ namespace PokerClubsApp.Controllers
 				parsedWeek = new Week(date);
 			}
 
+			(IndexGameResultsModel, int) result;
+
 			if (User.IsInRole("Player"))
 			{
-				var model = await gameResultsService.IndexGetAllGameResultsAsync(User.Identity!.Name!, parsedWeek, ClubId);
-
-				return View(model);
+				result = await gameResultsService.IndexGetAllGameResultsAsync(User.Identity!.Name!, parsedWeek, ClubId, PageNumber, PageSize);
 			}
 			else
 			{
-				var model = await gameResultsService.IndexGetAllGameResultsAsync(parsedWeek, ClubId);
-
-				return View(model);
+				result = await gameResultsService.IndexGetAllGameResultsAsync(parsedWeek, ClubId, PageNumber, PageSize);
 			}
 
-		}
+            ViewData["CurrentPage"] = PageNumber;
+            ViewData["TotalPages"] = result.Item2;
+
+            return View(result.Item1);
+
+        }
 	}
 }

@@ -21,8 +21,8 @@ namespace PokerClubsApp.Services.Data.Interfaces
 
         Task<DetailsGameResultModel?> GetGameResultsDetailsAsync(int id);
 
-		Task<IndexGameResultsModel> IndexGetAllGameResultsAsync(Week? week, int? clubId);
+		Task<(IndexGameResultsModel, int)> IndexGetAllGameResultsAsync(Week? week, int? clubId, int pageNumber, int pageSize);
 
-		Task<IndexGameResultsModel> IndexGetAllGameResultsAsync(string user, Week? week, int? clubId);
+        Task<(IndexGameResultsModel, int)> IndexGetAllGameResultsAsync(string user, Week? week, int? clubId, int pageNumber, int pageSize);
 	}
 }
