@@ -20,12 +20,12 @@ It's possible only if the player has an account which is created by the admin an
 - Check his game results
 
 ### Backend
-**Framework:** ASP.NET Core Web API (.NET 8.0)
-**Database:** Microsoft SQL Server
-**Programming Language:** C#
+- **Framework:** ASP.NET Core Web API (.NET 8.0)
+- **Database:** Microsoft SQL Server
+- **Programming Language:** C#
 
 ### Frontend
-**Bootstrap 5**
+- **CSS Framework:** Bootstrap 5
 
 ### Testing
 - **NUnit**: Comprehensive testing framework.
@@ -33,5 +33,10 @@ It's possible only if the player has an account which is created by the admin an
 - **MockQueryable**: Simplifying LINQ mocking for Entity Framework queries.
 
 ### Database Diagram
+
+
+![image](https://github.com/user-attachments/assets/f188bc3f-b6fb-4adb-8cda-dcc7ca4276ab)
+
+
 
 
